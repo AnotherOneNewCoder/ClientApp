@@ -33,7 +33,7 @@ interface ClientDao {
            WHERE id = :id
         """
     )
-    suspend fun updateClientByID(id: Long, dateOfBirth: String, name: String, durations: String?, prices: String?, photo: String?, notes: String?,
+    suspend fun updateClientByID(id: Long, dateOfBirth: String?, name: String, durations: String?, prices: String?, photo: String?, notes: String?,
                                  telNumber: String, visits: String?, works: String?)
 
 
@@ -47,4 +47,7 @@ interface ClientDao {
 
     @Query("SELECT COUNT(*) from ClientEntity WHERE id = :id")
     suspend fun getCount(id: Long): Int
+
+    @Query("SELECT * FROM ClientEntity WHERE id LIKE :searchQuery OR name LIKE :searchQuery OR telNumber LIKE :searchQuery")
+    fun searchUser(searchQuery: String): Flow<List<ClientEntity>>
 }

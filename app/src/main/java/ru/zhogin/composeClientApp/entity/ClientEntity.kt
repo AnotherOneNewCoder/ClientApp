@@ -1,5 +1,6 @@
 package ru.zhogin.composeClientApp.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.zhogin.composeClientApp.dto.Client
@@ -10,9 +11,11 @@ data class ClientEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val telNumber: String,
-    val photo: String?,
+    val photo: String? = null,
     val name: String,
-    val dateOfBirth: String,
+    val dateOfBirth: String? = null,
+    @Embedded
+    val gender: GenderTypeEmbedded,
     val visits: String?,
     val works: String?,
     val prices: String?,
@@ -25,6 +28,7 @@ data class ClientEntity(
         photo = photo,
         name = name,
         dateOfBirth = dateOfBirth,
+        gender = gender.toDto(),
         visits = TypeConverter.jsonToType(visits),
         works = TypeConverter.jsonToType(works),
         prices = TypeConverter.jsonToType(prices),
@@ -39,6 +43,7 @@ data class ClientEntity(
             photo = client.photo,
             name = client.name,
             dateOfBirth = client.dateOfBirth,
+            gender = GenderTypeEmbedded.fromDto(client.gender),
             visits = TypeConverter.toJson(client.visits),
             works = TypeConverter.toJson(client.works),
             prices = TypeConverter.toJson(client.prices),
@@ -47,3 +52,6 @@ data class ClientEntity(
         )
     }
 }
+
+fun List<ClientEntity>.toClientList() = map(ClientEntity::toDto)
+fun List<Client>.toClientEntity() = map(ClientEntity::fromDto)

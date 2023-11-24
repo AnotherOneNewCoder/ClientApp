@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.zhogin.composeClientApp.ui.theme.Brize
+import ru.zhogin.composeClientApp.ui.theme.MyBlue
+import ru.zhogin.composeClientApp.ui.theme.MyGreen
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.Purple40
 
@@ -27,7 +29,7 @@ fun BottomNavigationView(
         BottomItem.ScreenFourth,
     )
     androidx.compose.material.BottomNavigation(
-        backgroundColor = Purple40
+        backgroundColor = MyGreen
     ) {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
@@ -44,7 +46,7 @@ fun BottomNavigationView(
                         fontSize = 12.sp,
                     )
                 },
-                selectedContentColor = Orange,
+                selectedContentColor = MyBlue,
                 unselectedContentColor = Color.Black
             )
         }
