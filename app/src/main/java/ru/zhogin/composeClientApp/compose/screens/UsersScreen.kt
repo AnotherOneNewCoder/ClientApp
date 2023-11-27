@@ -35,8 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.compose.client.ClientListItem
-import ru.zhogin.composeClientApp.dto.Client
+import ru.zhogin.composeClientApp.compose.client.ClientListItem 
 import ru.zhogin.composeClientApp.ui.theme.Brize2
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.PinkTrans
@@ -50,7 +49,6 @@ fun UsersScreen(
     onNavigationNewClient: () -> Unit,
     onNavigationAvatarFullSize: () -> Unit,
     onNavigationEditClient: () -> Unit,
-
     ) {
 
 
