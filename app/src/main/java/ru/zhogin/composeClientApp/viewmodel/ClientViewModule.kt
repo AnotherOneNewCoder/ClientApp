@@ -21,6 +21,8 @@ private val emptyClient = Client(
     id = 0L,
     telNumber = "",
     name = "",
+    surname = "",
+    patronymicSurname = "",
     gender = GenderType.FEMALE,
     dateOfBirth = "",
 )

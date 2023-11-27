@@ -5,6 +5,8 @@ data class Client(
     val telNumber: String,
     val photo: String? = null,
     val name: String,
+    val surname: String,
+    val patronymicSurname: String? = null,
     val dateOfBirth: String? = null,
     val gender: GenderType,
     val visits: List<String> = emptyList(),

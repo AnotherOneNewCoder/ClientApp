@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.compose.client.ClientListItem 
+import ru.zhogin.composeClientApp.compose.client.ClientListItem
 import ru.zhogin.composeClientApp.ui.theme.Brize2
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.PinkTrans
@@ -132,6 +132,8 @@ fun UsersScreen(
                                             telNumber = client.telNumber,
                                             photo = client.photo,
                                             name = client.name,
+                                            surname = client.surname,
+                                            patronymicSurname = client.patronymicSurname,
                                             dateOfBirth = client.dateOfBirth,
                                             gender = client.gender,
                                         )
@@ -156,6 +158,8 @@ fun UsersScreen(
                                             telNumber = searchClient.telNumber,
                                             photo = searchClient.photo,
                                             name = searchClient.name,
+                                            surname = searchClient.surname,
+                                            patronymicSurname = searchClient.patronymicSurname,
                                             dateOfBirth = searchClient.dateOfBirth,
                                             gender = searchClient.gender,
                                         )
@@ -195,30 +199,3 @@ fun UsersScreen(
 
 }
 
-//@OptIn(ExperimentalGlideComposeApi::class)
-//@Composable
-//fun ClientAvatarFullSizeScreen(
-//
-//    onNavigationUsersScreen: () -> Unit,
-//    clientViewModule: ClientViewModule = hiltViewModel(),
-//
-//    ) {
-//
-//
-//    GlideImage(
-//        model = clientViewModule.photo.value?.uri, contentDescription = "Client's avatar",
-//        contentScale = ContentScale.FillWidth,
-//        modifier = Modifier
-//            .fillMaxSize().background(Color.Black)
-//            .clickable {
-//                Log.d("MyLog", "Uri: ${clientViewModule.photo.value}")
-//
-//                onNavigationUsersScreen()
-//                clientViewModule.clearPhoto()
-//            }
-//
-//    ) {
-//        it.error(R.drawable.no_avatar)
-//            .placeholder(R.drawable.no_avatar)
-//    }
-//}

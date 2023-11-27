@@ -6,6 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
@@ -60,31 +63,37 @@ fun ClientListItem(
     onClick: () -> Unit,
     onClickEdit: () -> Unit,
     clientViewModule: ClientViewModule = hiltViewModel(),
-    ) {
+) {
 
     val openAlertDialog = remember {
         mutableStateOf(false)
     }
-    when(openAlertDialog.value) {
+    when (openAlertDialog.value) {
         true -> {
             MyAlertDialog(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
                     clientViewModule.removeClientById(client.id)
                     openAlertDialog.value = false
-                                 },
+                },
                 dialogTitle = "Delete",
                 dialogText = "Are you sure?"
             )
         }
-        else-> {}
+
+        else -> {}
     }
+    val fullNameText =
+        if (!client.patronymicSurname.isNullOrBlank()) client.name + " " + client.surname + " " + client.patronymicSurname
+        else client.name + " " + client.surname
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .background(MyTransperent)
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp),
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+            //.horizontalScroll(rememberScrollState())
+                ,
         shape = RoundedCornerShape(32.dp),
         border = BorderStroke(1.dp, Purple40)
     ) {
@@ -117,7 +126,8 @@ fun ClientListItem(
 //                    modifier = Modifier.padding(start = 28.dp, top = 28.dp),
 //                    contentAlignment = Alignment.BottomEnd
                 ) {
-                    Text(text = client.id.toString(),
+                    Text(
+                        text = client.id.toString(),
                         modifier = Modifier
                             .padding(5.dp)
                             .background(Color.White, shape = CircleShape)
@@ -136,7 +146,8 @@ fun ClientListItem(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = client.name,
+
+                    text = fullNameText,
                     modifier = Modifier.background(Color.Transparent),
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center

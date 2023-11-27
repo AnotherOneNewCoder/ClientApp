@@ -1,6 +1,7 @@
 package ru.zhogin.composeClientApp.compose.screens
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -22,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.dto.Client
+
 import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
@@ -44,6 +48,12 @@ fun NewClientScreen(
 ) {
     val clientName = remember {
         mutableStateOf(clientViewModule.editedClient.value?.name)
+    }
+    val clientSurname = remember {
+        mutableStateOf(clientViewModule.editedClient.value?.surname)
+    }
+    val clientPatronymicSurname = remember {
+        mutableStateOf(clientViewModule.editedClient.value?.patronymicSurname)
     }
     val clientPhone = remember {
         mutableStateOf(clientViewModule.editedClient.value?.telNumber)
@@ -66,10 +76,13 @@ fun NewClientScreen(
             //imageUri.value = it
             imageUri2.value = it.toString()
         }
+    val context = LocalContext.current
 
     Card(
-
-        shape = RoundedCornerShape(24.dp)
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier
+            .padding(4.dp)
+            .verticalScroll(rememberScrollState())
     ) {
 
         Column(
@@ -78,7 +91,7 @@ fun NewClientScreen(
         ) {
             GlideImage(
                 modifier = Modifier
-                    .size(350.dp)
+                    .size(320.dp)
                     .padding(top = 8.dp)
                     .clickable {
                         launcher.launch("image/*")
@@ -96,7 +109,7 @@ fun NewClientScreen(
             TextField(
                 textStyle = TextStyle(
                     color = Color.Black,
-                    fontSize = 24.sp
+                    fontSize = 20.sp
                 ),
                 label = {
                     Text(text = "Name")
@@ -106,11 +119,37 @@ fun NewClientScreen(
                     clientName.value = it
                 })
 
+            TextField(
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 20.sp
+                ),
+                label = {
+                    Text(text = "Surname")
+                },
+                value = clientSurname.value.toString(),
+                onValueChange = {
+                    clientSurname.value = it
+                })
 
             TextField(
                 textStyle = TextStyle(
                     color = Color.Black,
-                    fontSize = 24.sp
+                    fontSize = 20.sp
+                ),
+                label = {
+                    Text(text = "Patronymic surname")
+                },
+                value = clientPatronymicSurname.value.toString(),
+                onValueChange = {
+                    clientPatronymicSurname.value = it
+                })
+
+
+            TextField(
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 20.sp
                 ),
                 value = clientPhone.value.toString(),
                 onValueChange = {
@@ -126,7 +165,7 @@ fun NewClientScreen(
             TextField(
                 textStyle = TextStyle(
                     color = Color.Black,
-                    fontSize = 24.sp
+                    fontSize = 20.sp
                 ),
                 value = clientDateOfBirth.value.toString()
 //                if (clientViewModule.editedClient.value?.dateOfBirth.isNullOrBlank()){ "" }
@@ -148,8 +187,7 @@ fun NewClientScreen(
                     modifier = Modifier.padding(top = 10.dp, end = 8.dp),
                     fontSize = 16.sp,
                 )
-                Switch(checked = checkedSwitcher.value
-                , onCheckedChange = {
+                Switch(checked = checkedSwitcher.value, onCheckedChange = {
                     checkedSwitcher.value = it
                 })
                 Text(
@@ -160,20 +198,25 @@ fun NewClientScreen(
             }
 
             TextButton(onClick = {
-                clientViewModule.editedClient.value =
-                    clientViewModule.editedClient.value?.copy(
-                        name = clientName.value.toString(),
-                        telNumber = clientPhone.value.toString(),
-                        gender = when (checkedSwitcher.value) {
-                            false -> GenderType.FEMALE
-                            true -> GenderType.MALE
+                if (!clientName.value.isNullOrBlank() && !clientSurname.value.isNullOrBlank()) {
+                    clientViewModule.editedClient.value =
+                        clientViewModule.editedClient.value?.copy(
+                            name = clientName.value.toString(),
+                            surname = clientSurname.value.toString(),
+                            patronymicSurname = clientPatronymicSurname.value.toString(),
+                            telNumber = clientPhone.value.toString(),
+                            gender = when (checkedSwitcher.value) {
+                                false -> GenderType.FEMALE
+                                true -> GenderType.MALE
 
-                        },
-                        photo = imageUri2.value.toString(),
-                        dateOfBirth = clientDateOfBirth.value.toString(),
-                    )
-                clientViewModule.saveClient()
-                onNavigation()
+                            },
+                            photo = imageUri2.value.toString(),
+                            dateOfBirth = clientDateOfBirth.value.toString(),
+                        )
+                    clientViewModule.saveClient()
+                    onNavigation()
+                } else
+                    Toast.makeText(context, "Fields Name and Surname should be filled!", Toast.LENGTH_SHORT).show()
             }) {
                 Text(
                     text = stringResource(id = R.string.add),

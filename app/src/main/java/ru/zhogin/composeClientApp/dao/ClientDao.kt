@@ -12,7 +12,7 @@ interface ClientDao {
     fun getAll(): Flow<List<ClientEntity>>
 
     suspend fun save(client: ClientEntity) =
-        if (client.id == 0L) insert(client) else updateClientByID(client.id, client.dateOfBirth, client.name, client.durations, client.prices,client.photo,
+        if (client.id == 0L) insert(client) else updateClientByID(client.id, client.dateOfBirth, client.name, client.surname, client.patronymicSurname, client.durations, client.prices,client.photo,
             client.notes, client.telNumber, client.visits, client.works)
 
     @Insert
@@ -23,6 +23,8 @@ interface ClientDao {
            UPDATE ClientEntity SET
                dateOfBirth = :dateOfBirth,
                name = :name,
+               surname = :surname,
+               patronymicSurname = :patronymicSurname,
                durations = :durations,
                prices = :prices,
                photo = :photo,
@@ -33,7 +35,7 @@ interface ClientDao {
            WHERE id = :id
         """
     )
-    suspend fun updateClientByID(id: Long, dateOfBirth: String?, name: String, durations: String?, prices: String?, photo: String?, notes: String?,
+    suspend fun updateClientByID(id: Long, dateOfBirth: String?, name: String, surname: String, patronymicSurname: String? ,durations: String?, prices: String?, photo: String?, notes: String?,
                                  telNumber: String, visits: String?, works: String?)
 
 
@@ -48,6 +50,7 @@ interface ClientDao {
     @Query("SELECT COUNT(*) from ClientEntity WHERE id = :id")
     suspend fun getCount(id: Long): Int
 
-    @Query("SELECT * FROM ClientEntity WHERE id LIKE :searchQuery OR name LIKE :searchQuery OR telNumber LIKE :searchQuery")
+    @Query("SELECT * FROM ClientEntity WHERE id LIKE :searchQuery OR name LIKE :searchQuery " +
+            "OR surname LIKE :searchQuery  OR patronymicSurname LIKE :searchQuery OR telNumber LIKE :searchQuery")
     fun searchUser(searchQuery: String): Flow<List<ClientEntity>>
 }
