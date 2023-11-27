@@ -36,18 +36,7 @@ import ru.zhogin.composeClientApp.ui.theme.PinkTrans
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
 
-@Composable
-fun CalendarScreen() {
-    Image(
-        painter = painterResource(
-            id = R.drawable.cat_profile
-        ),
-        contentDescription = "img1",
-        Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    )
-}
+
 
 
 
