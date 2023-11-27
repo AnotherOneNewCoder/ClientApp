@@ -43,24 +43,28 @@ fun NewClientScreen(
     onNavigation: () -> Unit
 ) {
     val clientName = remember {
-        mutableStateOf("")
+        mutableStateOf(clientViewModule.editedClient.value?.name)
     }
     val clientPhone = remember {
-        mutableStateOf("")
+        mutableStateOf(clientViewModule.editedClient.value?.telNumber)
     }
     val clientDateOfBirth = remember {
-        mutableStateOf("")
+        mutableStateOf(clientViewModule.editedClient.value?.dateOfBirth)
     }
     val checkedSwitcher = remember {
         mutableStateOf(false)
     }
-    val imageUri= remember {
+    val imageUri = remember {
         mutableStateOf<Uri?>(null)
+    }
+    val imageUri2 = remember {
+        mutableStateOf(clientViewModule.editedClient.value?.photo)
     }
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
-            imageUri.value = it
+            //imageUri.value = it
+            imageUri2.value = it.toString()
         }
 
     Card(
@@ -79,7 +83,7 @@ fun NewClientScreen(
                     .clickable {
                         launcher.launch("image/*")
                     },
-                model = imageUri.value,
+                model = imageUri2.value,
 
                 contentDescription = "Avatar"
             ) {
@@ -97,7 +101,7 @@ fun NewClientScreen(
                 label = {
                     Text(text = "Name")
                 },
-                value = clientName.value,
+                value = clientName.value.toString(),
                 onValueChange = {
                     clientName.value = it
                 })
@@ -108,7 +112,7 @@ fun NewClientScreen(
                     color = Color.Black,
                     fontSize = 24.sp
                 ),
-                value = clientPhone.value,
+                value = clientPhone.value.toString(),
                 onValueChange = {
                     clientPhone.value = it
                 },
@@ -124,7 +128,10 @@ fun NewClientScreen(
                     color = Color.Black,
                     fontSize = 24.sp
                 ),
-                value = clientDateOfBirth.value,
+                value = clientDateOfBirth.value.toString()
+//                if (clientViewModule.editedClient.value?.dateOfBirth.isNullOrBlank()){ "" }
+//                else clientDateOfBirth.value.toString()
+                ,
                 onValueChange = {
                     clientDateOfBirth.value = it
                 },
@@ -141,7 +148,8 @@ fun NewClientScreen(
                     modifier = Modifier.padding(top = 10.dp, end = 8.dp),
                     fontSize = 16.sp,
                 )
-                Switch(checked = checkedSwitcher.value, onCheckedChange = {
+                Switch(checked = checkedSwitcher.value
+                , onCheckedChange = {
                     checkedSwitcher.value = it
                 })
                 Text(
@@ -152,16 +160,18 @@ fun NewClientScreen(
             }
 
             TextButton(onClick = {
-                clientViewModule.editedClient.value = Client(
-                    id = 0,
-                    name = clientName.value,
-                    telNumber = clientPhone.value,
-                    gender = when (checkedSwitcher.value) {
-                        false -> GenderType.FEMALE
-                        else -> GenderType.MALE
-                    },
-                    photo = imageUri.value.toString()
-                )
+                clientViewModule.editedClient.value =
+                    clientViewModule.editedClient.value?.copy(
+                        name = clientName.value.toString(),
+                        telNumber = clientPhone.value.toString(),
+                        gender = when (checkedSwitcher.value) {
+                            false -> GenderType.FEMALE
+                            true -> GenderType.MALE
+
+                        },
+                        photo = imageUri2.value.toString(),
+                        dateOfBirth = clientDateOfBirth.value.toString(),
+                    )
                 clientViewModule.saveClient()
                 onNavigation()
             }) {
@@ -176,3 +186,5 @@ fun NewClientScreen(
 
 
 }
+
+

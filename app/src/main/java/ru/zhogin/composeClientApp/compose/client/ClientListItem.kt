@@ -58,6 +58,7 @@ import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 fun ClientListItem(
     client: Client,
     onClick: () -> Unit,
+    onClickEdit: () -> Unit,
     clientViewModule: ClientViewModule = hiltViewModel(),
     ) {
 
@@ -152,7 +153,7 @@ fun ClientListItem(
                 modifier = Modifier.padding(end = 12.dp)
             ) {
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { onClickEdit() },
                     modifier = Modifier.size(32.dp),
 
                     ) {

@@ -50,61 +50,7 @@ fun CalendarScreen() {
 }
 
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun UsersScreen(
-//    clientViewModule: ClientViewModule = hiltViewModel(),
-//    onNavigation: () -> Unit
-//
-//) {
-//
-//
-//    val listClient = clientViewModule.data.collectAsState(initial = emptyList())
-//
-//
-//
-//    Surface(modifier = Modifier.fillMaxSize()) {
-//
-//
-//        Box(modifier = with(Modifier) {
-//            fillMaxSize()
-//                .background(Color.Black)
-//                .paint(
-//                    painterResource(id = R.drawable.full_cat),
-//                    contentScale = ContentScale.Crop
-//                )
-//        }) {
-//            Column{
-//                ClientSearchBar()
-//                LazyColumn(
-//                    modifier = Modifier.background(PinkTrans).padding(bottom = 108.dp)
-//                ) {
-//                    items(listClient.value) { client ->
-//                        ClientListItem(client = client)
-//                    }
-//                }
-//            }
-//
-//
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(bottom = 64.dp, end = 16.dp), contentAlignment = Alignment.BottomEnd
-//            ) {
-//                FloatingActionButton(
-//                    onClick = {
-//                        onNavigation()
-//                    },
-//                    backgroundColor = Orange,
-//
-//                    ) {
-//                    Icon(Icons.Filled.Add, contentDescription = "Add")
-//                }
-//            }
-//        }
-//    }
-//
-//}
+
 
 @Composable
 fun NotesScreen() {

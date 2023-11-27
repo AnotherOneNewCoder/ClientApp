@@ -22,6 +22,7 @@ private val emptyClient = Client(
     telNumber = "",
     name = "",
     gender = GenderType.FEMALE,
+    dateOfBirth = "",
 )
 
 @HiltViewModel
@@ -36,7 +37,7 @@ class ClientViewModule @Inject constructor(
 
     val data = repository.data
     val editedClient = MutableLiveData(emptyClient)
-    var uri: String = ""
+
     fun saveClient() {
         editedClient.value?.let { client ->
             viewModelScope.launch {
@@ -60,6 +61,9 @@ class ClientViewModule @Inject constructor(
 
     fun setPhoto(uri: Uri?) {
         _photo.value = PhotoModel(uri)
+    }
+    fun clearData() {
+        editedClient.value = emptyClient
     }
     fun clearPhoto() {
         _photo.value = noAvatar

@@ -1,5 +1,7 @@
 package ru.zhogin.composeClientApp.compose.screens
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -7,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,19 +25,19 @@ fun ClientAvatarFullSizeScreen(
     onNavigationUsersScreen: () -> Unit,
     clientViewModule: ClientViewModule = hiltViewModel(),
 
-){
+    ) {
 
-    val uri = remember {
-        mutableStateOf(clientViewModule.photo.value?.uri)
-    }
+
     GlideImage(
-        model = clientViewModule.uri, contentDescription = "Client's avatar",
-        contentScale = ContentScale.None,
+        model = clientViewModule.photo.value?.uri, contentDescription = "Client's avatar",
+        contentScale = ContentScale.FillWidth,
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().background(Color.Black)
             .clickable {
+                Log.d("MyLog", "Uri: ${clientViewModule.photo.value}")
 
                 onNavigationUsersScreen()
+                //clientViewModule.clearPhoto()
             }
 
     ) {
