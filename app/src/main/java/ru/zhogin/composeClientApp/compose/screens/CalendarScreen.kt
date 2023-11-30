@@ -1,12 +1,8 @@
 package ru.zhogin.composeClientApp.compose.screens
 
-import android.icu.util.Calendar
-import android.icu.util.LocaleData
 import android.os.Build
-import android.widget.CalendarView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.icons.Icons
@@ -32,13 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.room.util.copyAndClose
-import com.mabn.calendarlibrary.ExpandableCalendar
-import com.mabn.calendarlibrary.core.calendarDefaultTheme
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
-import io.github.boguszpawlowski.composecalendar.SelectableWeekCalendar
-import io.github.boguszpawlowski.composecalendar.StaticWeekCalendar
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.calendar.CustomDay
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
@@ -46,8 +38,6 @@ import ru.zhogin.composeClientApp.dto.CalendarDayEvent
 import ru.zhogin.composeClientApp.ui.theme.MyWhite
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.Purple40
-import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -68,8 +58,8 @@ fun CalendarScreen() {
         CalendarDayEvent(
             name = "Google I/O Keynote",
             color = Color(0xFFAFBBF2),
-            start = LocalDateTime.parse("2021-05-18T13:00:00"),
-            end = LocalDateTime.parse("2021-05-18T15:00:00"),
+            start = LocalDateTime.parse("2021-05-18T10:00:00"),
+            end = LocalDateTime.parse("2021-05-18T11:00:00"),
             description = "Tune in to find out about how we're furthering our mission to organize the world’s information and make it universally accessible and useful.",
         ),
         CalendarDayEvent(
@@ -82,8 +72,8 @@ fun CalendarScreen() {
         CalendarDayEvent(
             name = "What's new in Android",
             color = Color(0xFF1B998B),
-            start = LocalDateTime.parse("2021-05-18T16:50:00"),
-            end = LocalDateTime.parse("2021-05-18T19:00:00"),
+            start = LocalDateTime.parse("2021-05-18T01:50:00"),
+            end = LocalDateTime.parse("2021-05-18T03:20:00"),
             description = "In this Keynote, Chet Haase, Dan Sandler, and Romain Guy discuss the latest Android features and enhancements for developers.",
         ),
         )
@@ -140,20 +130,25 @@ fun CalendarScreen() {
 //                        }
 //
 //                        )
-                        SelectableCalendar(
-                            modifier = Modifier.size(300.dp),
-                            dayContent = { CustomDay(state = it,
-                                onClick = { clickedDay ->
-                                    date.value = clickedDay.toString()
-                                })}
-                        )
-
-
-                        Text(text = date.value.toString())
-                        Text(text = weekends.value.toString())
+//                        SelectableCalendar(
+//                            modifier = Modifier.size(300.dp),
+//                            dayContent = { CustomDay(state = it,
+//                                onClick = { clickedDay ->
+//                                    date.value = clickedDay.toString()
+//                                })}
+//                        )
+//
+//
+//                        Text(text = date.value.toString())
+//                        Text(text = weekends.value.toString())
 
                         Schedule(
-                            modifier = Modifier.fillMaxWidth(0.7f),
+                            modifier = Modifier
+                                .fillMaxWidth(0.75f)
+//                                .verticalScroll(
+//                                    rememberScrollState())
+
+                            ,
                             calendarDayEvents = sampleCalendarEvents)
 
 
