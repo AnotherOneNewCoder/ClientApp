@@ -41,6 +41,7 @@ import ru.zhogin.composeClientApp.compose.calendar.CustomDay
 import ru.zhogin.composeClientApp.compose.calendar.CustomMonthHeader
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
+import ru.zhogin.composeClientApp.dto.ColorType
 import ru.zhogin.composeClientApp.ui.theme.MyWhite
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.Purple40
@@ -65,7 +66,7 @@ fun CalendarScreen() {
 
         CalendarDayEvent(
             name = "Клиент 134",
-            color = Color(0xFFAFBBF2),
+            color = ColorType.WHITE,
             start = LocalDateTime.parse("2021-05-18T10:00:00"),
             end = LocalDateTime.parse("2021-05-18T11:00:00"),
             id = 0L,
@@ -74,7 +75,7 @@ fun CalendarScreen() {
         ),
         CalendarDayEvent(
             name = "Клиент 186",
-            color = Color(0xFFAFBBF2),
+            color = ColorType.GREEN,
             start = LocalDateTime.parse("2021-05-18T15:15:00"),
             end = LocalDateTime.parse("2021-05-18T16:00:00"),
             id = 1L,
@@ -83,7 +84,7 @@ fun CalendarScreen() {
         ),
         CalendarDayEvent(
             name = "Клиент 234",
-            color = Color(0xFF1B998B),
+            color = ColorType.WHITE,
             start = LocalDateTime.parse("2021-05-18T01:50:00"),
             end = LocalDateTime.parse("2021-05-18T03:20:00"),
             id = 2L,
@@ -149,6 +150,7 @@ fun CalendarScreen() {
                             dayContent = { CustomDay(state = it,
                                 onClick = { clickedDay ->
                                     date.value = clickedDay.toString()
+
                                 })},
                             monthHeader = { CustomMonthHeader(monthState = it)}
                         )

@@ -1,40 +1,43 @@
 package ru.zhogin.composeClientApp.entity
 
 import androidx.compose.ui.graphics.Color
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
+import ru.zhogin.composeClientApp.dto.ColorType
 import java.time.LocalDate
 import java.time.LocalDateTime
 @Entity
 data class CalendarDayEventEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val date: LocalDate,
+    val date: String,
     val name: String,
-    val color: Color,
-    val start: LocalDateTime,
-    val end: LocalDateTime,
+    @Embedded
+    val color: ColorTypeEmbedded,
+    val start: String,
+    val end: String,
     val description: String? = null
 ) {
     fun toDto() = CalendarDayEvent(
         id = id,
-        date = date,
+        date = LocalDate.parse(date),
         name = name,
-        color = color,
-        start = start,
-        end = end,
+        color = color.toDto(),
+        start = LocalDateTime.parse(start),
+        end = LocalDateTime.parse(end),
         description = description
     )
 
     companion object{
         fun fromDto(calendarDayEvent: CalendarDayEvent): CalendarDayEventEntity = CalendarDayEventEntity(
             id = calendarDayEvent.id,
-            date = calendarDayEvent.date,
+            date = calendarDayEvent.date.toString(),
             name = calendarDayEvent.name,
-            color = calendarDayEvent.color,
-            start = calendarDayEvent.start,
-            end = calendarDayEvent.end,
+            color = ColorTypeEmbedded.fromDto(calendarDayEvent.color),
+            start = calendarDayEvent.start.toString(),
+            end = calendarDayEvent.end.toString(),
             description = calendarDayEvent.description
         )
     }

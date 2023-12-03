@@ -21,6 +21,7 @@ fun Schedule(
     calendarDayEvents: List<CalendarDayEvent>,
     modifier: Modifier = Modifier,
     minDate: LocalDate? = calendarDayEvents.minByOrNull(CalendarDayEvent::start)?.start?.toLocalDate(),
+    //minDate: LocalDate? = calendarDayEvents.minByOrNull(CalendarDayEvent::start)?.LocalDate.parse(start?).toLocalDate(),
     maxDate: LocalDate? = calendarDayEvents.minByOrNull(CalendarDayEvent::end)?.end?.toLocalDate(),
     calendarDayEventContent: @Composable (calendarDayEvent: CalendarDayEvent) -> Unit = { BasicCalendarEvent(
         dayEvent = it

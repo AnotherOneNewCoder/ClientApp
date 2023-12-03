@@ -8,8 +8,12 @@ data class CalendarDayEvent(
     val id: Long,
     val date: LocalDate,
     val name: String,
-    val color: Color,
+    val color: ColorType,
     val start: LocalDateTime,
     val end: LocalDateTime,
     val description: String? = null
 )
+enum class ColorType{
+    GREEN, WHITE
+}
+

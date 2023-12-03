@@ -8,6 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ru.zhogin.composeClientApp.dao.CalendarDayDao
+import ru.zhogin.composeClientApp.dao.CalendarDayEventDao
 import ru.zhogin.composeClientApp.dao.ClientDao
 import ru.zhogin.composeClientApp.db.AppDb
 import javax.inject.Singleton
@@ -28,4 +30,15 @@ object DBModule {
     fun providesClientDao(
         appDb: AppDb
     ): ClientDao = appDb.clientDao()
+
+    @Provides
+    fun providesCalendarDayDao(
+        appDb: AppDb
+    ): CalendarDayDao = appDb.calendarDayDao()
+
+    @Provides
+    fun providesCalendarDayEventDao(
+        appDb: AppDb
+    ): CalendarDayEventDao = appDb.calendarDayEventDao()
+
 }

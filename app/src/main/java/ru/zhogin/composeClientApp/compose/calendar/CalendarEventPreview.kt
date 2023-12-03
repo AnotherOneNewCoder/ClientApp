@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
+import ru.zhogin.composeClientApp.dto.ColorType
 import ru.zhogin.composeClientApp.ui.theme.ClientAppTheme
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -16,7 +17,7 @@ import java.time.LocalDateTime
 private val sampleCalendarEvents = listOf(
     CalendarDayEvent(
         name = "Google I/O Keynote",
-        color = Color(0xFFAFBBF2),
+        color = ColorType.WHITE,
         start = LocalDateTime.parse("2021-05-18T13:00:00"),
         end = LocalDateTime.parse("2021-05-18T15:00:00"),
         id = 3L,
@@ -25,7 +26,7 @@ private val sampleCalendarEvents = listOf(
     ),
     CalendarDayEvent(
         name = "Developer Keynote",
-        color = Color(0xFFAFBBF2),
+        color = ColorType.GREEN,
         start = LocalDateTime.parse("2021-05-18T15:15:00"),
         end = LocalDateTime.parse("2021-05-18T16:00:00"),
         id = 0L,
@@ -34,7 +35,7 @@ private val sampleCalendarEvents = listOf(
     ),
     CalendarDayEvent(
         name = "What's new in Android",
-        color = Color(0xFF1B998B),
+        color = ColorType.WHITE,
         start = LocalDateTime.parse("2021-05-18T16:50:00"),
         end = LocalDateTime.parse("2021-05-18T17:00:00"),
         id = 2L,

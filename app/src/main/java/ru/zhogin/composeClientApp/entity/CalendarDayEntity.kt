@@ -10,7 +10,7 @@ import java.time.LocalDate
 data class CalendarDayEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val date: LocalDate,
+    val date: String,
     val isWeekend: Boolean = false,
     val isWorkingDay: Boolean = false,
 ) {
