@@ -1,11 +1,17 @@
 package ru.zhogin.composeClientApp.compose.calendar
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
 import java.time.LocalDate
@@ -22,13 +28,18 @@ fun Schedule(
     dayHeader: @Composable (day: LocalDate) -> Unit = { BasicDayHeader(day = it)}
 ) {
     val hourHeight = 64.dp
+    val dayWidth = 256.dp
     val verticalScrollState = rememberScrollState()
-    val verticalScrollState2 = rememberScrollState()
+
+    var sideBarWidth by remember {
+        mutableStateOf(0)
+    }
     Column(modifier = modifier) {
         ScheduleHeader(
             minDate = minDate,
             maxDate = maxDate,
             dayHeader = dayHeader,
+
             )
 
         Row(
@@ -37,16 +48,19 @@ fun Schedule(
             ScheduleSideBar(
                 hourHeight = hourHeight,
                 modifier = modifier.verticalScroll(verticalScrollState)
+                    .onGloballyPositioned { sideBarWidth = it.size.width }
             )
             BasicSchedule(
                 calendarDayEvents = calendarDayEvents,
                 hourHeight = hourHeight,
                 modifier = modifier
 
-                    .verticalScroll(verticalScrollState),
+                    .verticalScroll(verticalScrollState)
+                    ,
                 minDate = minDate,
                 maxDate = maxDate,
                 calendarDayEventContent = calendarDayEventContent,
+                dayWidth = dayWidth,
             )
 
 

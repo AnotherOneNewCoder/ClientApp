@@ -1,6 +1,7 @@
 package ru.zhogin.composeClientApp.compose.screens
 
 import android.os.Build
+import android.widget.CalendarView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,19 +27,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.mabn.calendarlibrary.ExpandableCalendar
+import com.mabn.calendarlibrary.core.calendarDefaultTheme
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.calendar.CustomDay
+import ru.zhogin.composeClientApp.compose.calendar.CustomMonthHeader
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
 import ru.zhogin.composeClientApp.ui.theme.MyWhite
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.Purple40
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -56,24 +64,30 @@ fun CalendarScreen() {
     val sampleCalendarEvents = listOf(
 
         CalendarDayEvent(
-            name = "Google I/O Keynote",
+            name = "Клиент 134",
             color = Color(0xFFAFBBF2),
             start = LocalDateTime.parse("2021-05-18T10:00:00"),
             end = LocalDateTime.parse("2021-05-18T11:00:00"),
+            id = 0L,
+            date = LocalDate.parse("2021-05-18"),
             description = "Tune in to find out about how we're furthering our mission to organize the world’s information and make it universally accessible and useful.",
         ),
         CalendarDayEvent(
-            name = "Developer Keynote",
+            name = "Клиент 186",
             color = Color(0xFFAFBBF2),
             start = LocalDateTime.parse("2021-05-18T15:15:00"),
             end = LocalDateTime.parse("2021-05-18T16:00:00"),
+            id = 1L,
+            date = LocalDate.parse("2021-05-18"),
             description = "Learn about the latest updates to our developer products and platforms from Google Developers.",
         ),
         CalendarDayEvent(
-            name = "What's new in Android",
+            name = "Клиент 234",
             color = Color(0xFF1B998B),
             start = LocalDateTime.parse("2021-05-18T01:50:00"),
             end = LocalDateTime.parse("2021-05-18T03:20:00"),
+            id = 2L,
+            date = LocalDate.parse("2021-05-18"),
             description = "In this Keynote, Chet Haase, Dan Sandler, and Romain Guy discuss the latest Android features and enhancements for developers.",
         ),
         )
@@ -103,8 +117,8 @@ fun CalendarScreen() {
 
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MyWhite)
+
+
                             ,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -128,23 +142,24 @@ fun CalendarScreen() {
 //                        ),onDayClick = {
 //                            date.value = it.toString()
 //                        }
-//
+
 //                        )
-//                        SelectableCalendar(
-//                            modifier = Modifier.size(300.dp),
-//                            dayContent = { CustomDay(state = it,
-//                                onClick = { clickedDay ->
-//                                    date.value = clickedDay.toString()
-//                                })}
-//                        )
-//
-//
+                        SelectableCalendar(
+                            modifier = Modifier.size(320.dp),
+                            dayContent = { CustomDay(state = it,
+                                onClick = { clickedDay ->
+                                    date.value = clickedDay.toString()
+                                })},
+                            monthHeader = { CustomMonthHeader(monthState = it)}
+                        )
+
+
 //                        Text(text = date.value.toString())
 //                        Text(text = weekends.value.toString())
 
                         Schedule(
-                            modifier = Modifier
-                                .fillMaxWidth(0.75f)
+                            modifier = Modifier.padding(start = 24.dp, bottom = 44.dp)
+  //                              .fillMaxWidth(0.9f)
 //                                .verticalScroll(
 //                                    rememberScrollState())
 

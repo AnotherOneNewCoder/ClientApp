@@ -3,8 +3,12 @@ package ru.zhogin.composeClientApp.compose.calendar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.ParentDataModifier
 
@@ -27,8 +31,9 @@ fun BasicSchedule(
         dayEvent = it
     )},
     hourHeight: Dp,
+    dayWidth: Dp,
 ) {
-
+    val dividerColor = if (MaterialTheme.colors.isLight) Color.LightGray else Color.DarkGray
 
     Layout(
         content = {
@@ -40,22 +45,35 @@ fun BasicSchedule(
             }
         },
         modifier = modifier
+            .drawBehind {
+                repeat(23) {
+                    drawLine(
+                        dividerColor,
+                        start = Offset(0f, (it + 1) * hourHeight.toPx()),
+                        end = Offset(size.width, (it + 1) * hourHeight.toPx()),
+                        strokeWidth = 1.dp.toPx()
+                    )
+                }
+            }
 //            .verticalScroll(rememberScrollState()),
     )
     {measureables, constraints ->
         val height = hourHeight.roundToPx() * 24
+        val width = dayWidth.roundToPx()
         val placeables = measureables.map { measurable ->
             val calendarDayEvent = measurable.parentData as CalendarDayEvent
             val calendarDayEventDurationMinutes = ChronoUnit.MINUTES.between(calendarDayEvent.start, calendarDayEvent.end)
             val calendarDayEventHeight = ((calendarDayEventDurationMinutes / 60f) * hourHeight.toPx()).roundToInt()
-            val placeable = measurable.measure(constraints.copy(minHeight = calendarDayEventHeight,maxHeight = calendarDayEventHeight))
+            val placeable = measurable.measure(constraints.copy(minWidth = dayWidth.roundToPx(), maxWidth = dayWidth.roundToPx(),minHeight = calendarDayEventHeight,maxHeight = calendarDayEventHeight))
             Pair(placeable,calendarDayEvent)
         }
-        layout(constraints.maxWidth, height) {
+        layout(width, height) {
             placeables.forEach { (placeable, calendarDayEvent) ->
                 val calendarDayEventOffSetMinutes = ChronoUnit.MINUTES.between(LocalTime.MIN, calendarDayEvent.start.toLocalTime())
                 val calendarDayEventY = ((calendarDayEventOffSetMinutes / 60f) * hourHeight.toPx()).roundToInt()
-                placeable.place(0, calendarDayEventY)
+                val calendarDayEventOffDays = ChronoUnit.DAYS.between(minDate, calendarDayEvent.start.toLocalDate()).toInt()
+                val calendarDayEventX = calendarDayEventOffDays * dayWidth.roundToPx()
+                placeable.place(calendarDayEventX, calendarDayEventY)
             }
         }
     }
