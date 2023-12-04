@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-private val hourFormatter = DateTimeFormatter.ofPattern("h a")
+private val hourFormatter = DateTimeFormatter.ofPattern("HH:mm")
 @Composable
 fun BasicSidebarLabel(
     time: LocalTime,

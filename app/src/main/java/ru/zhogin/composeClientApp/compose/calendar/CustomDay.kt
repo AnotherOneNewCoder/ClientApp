@@ -10,14 +10,20 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.mabn.calendarlibrary.CalendarViewModel
 import io.github.boguszpawlowski.composecalendar.day.DayState
 import io.github.boguszpawlowski.composecalendar.selection.SelectionState
+import ru.zhogin.composeClientApp.ui.theme.Brize2
+import ru.zhogin.composeClientApp.ui.theme.MyBlue
 import ru.zhogin.composeClientApp.ui.theme.MyRed
+import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import java.time.LocalDate
 
 /**
@@ -32,20 +38,37 @@ import java.time.LocalDate
 public fun <T : SelectionState> CustomDay(
     state: DayState<T>,
     modifier: Modifier = Modifier,
-    selectionColor: Color = MyRed,
+    selectionColor: Color = MyBlue,
     currentDayColor: Color = MaterialTheme.colors.primary,
     onClick: (LocalDate) -> Unit = {},
+    calendarDayViewModel: CalendarDayViewModel = hiltViewModel()
 ) {
     val date = state.date
     val selectionState = state.selectionState
-
+    val listOfCalendarDaysInDb = calendarDayViewModel.data.collectAsState(initial = emptyList())
     val isSelected = selectionState.isDateSelected(date)
 
 
     val selectedList = remember {
         mutableListOf<LocalDate>()
     }
-    val isSelected2 = selectedList.contains(date)
+    val listOfWorkingDays = listOfCalendarDaysInDb.value.filter { calendarDay ->
+        calendarDay.isWorkingDay
+    }
+    val listOfWeekends = listOfCalendarDaysInDb.value.filter { calendarDay ->
+        calendarDay.isWeekend
+    }
+    val isSelectedWorkingDay = listOfWorkingDays.map {
+        it.date
+    }
+    val isSelectedWeekend = listOfWeekends.map {
+        it.date
+    }
+
+//    val isSelected2 = selectedList.contains(date)
+//    val isSelected3 = listOfCalendarDaysInDb.value.map {calendarDay ->
+//        calendarDay.date
+//    }
 
     Card(
         modifier = modifier
@@ -53,7 +76,10 @@ public fun <T : SelectionState> CustomDay(
             .padding(2.dp),
         elevation = if (state.isFromCurrentMonth) 4.dp else 0.dp,
         border = if (state.isCurrentDay) BorderStroke(1.dp, currentDayColor) else null,
-        contentColor = if (isSelected2) selectionColor else contentColorFor(
+        contentColor = if (isSelectedWorkingDay.contains(date.toString())) MyRed
+        else if (isSelectedWeekend.contains(date.toString())) Brize2
+        else if (isSelected) selectionColor
+        else contentColorFor(
             backgroundColor = MaterialTheme.colors.surface
         )
     ) {

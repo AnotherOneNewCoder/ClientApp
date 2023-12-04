@@ -20,7 +20,7 @@ import ru.zhogin.composeClientApp.ui.theme.MenColor
 import ru.zhogin.composeClientApp.ui.theme.WomenColor
 import java.time.format.DateTimeFormatter
 
-val calendarDayEventFormatter = DateTimeFormatter.ofPattern("h:mm a")
+val calendarDayEventFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 @Composable
 fun BasicCalendarEvent(

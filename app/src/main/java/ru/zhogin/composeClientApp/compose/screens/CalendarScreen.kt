@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mabn.calendarlibrary.ExpandableCalendar
 import com.mabn.calendarlibrary.core.calendarDefaultTheme
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
@@ -45,13 +47,22 @@ import ru.zhogin.composeClientApp.dto.ColorType
 import ru.zhogin.composeClientApp.ui.theme.MyWhite
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.Purple40
+import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(
+    calendarDayViewModel: CalendarDayViewModel = hiltViewModel(),
+    onNavigationCalendarDayAndEventsScreen: () -> Unit,
+) {
+
+    val listOfCalendarDaysInDb = calendarDayViewModel.data.collectAsState(initial = emptyList())
+
+
+
     val date = remember {
         mutableStateOf("")
     }
@@ -150,14 +161,14 @@ fun CalendarScreen() {
                             dayContent = { CustomDay(state = it,
                                 onClick = { clickedDay ->
                                     date.value = clickedDay.toString()
-
+                                    calendarDayViewModel.editedSelectedDay.value = clickedDay
                                 })},
                             monthHeader = { CustomMonthHeader(monthState = it)}
                         )
 
 
-//                        Text(text = date.value.toString())
-//                        Text(text = weekends.value.toString())
+                        Text(text = date.value.toString())
+                        Text(text = weekends.value.toString())
 
                         Schedule(
                             modifier = Modifier.padding(start = 24.dp, bottom = 44.dp)
@@ -179,6 +190,7 @@ fun CalendarScreen() {
                         FloatingActionButton(
                             onClick = {
                                 weekends.value = date.value
+                                onNavigationCalendarDayAndEventsScreen()
                             },
                             backgroundColor = Orange,
 
