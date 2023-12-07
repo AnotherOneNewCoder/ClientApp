@@ -21,6 +21,7 @@ data class ClientEntity(
     val visits: String?,
     val works: String?,
     val prices: String?,
+    val tips: String?,
     val durations: String?,
     val notes: String?
 ) {
@@ -36,6 +37,7 @@ data class ClientEntity(
         visits = TypeConverter.jsonToType(visits),
         works = TypeConverter.jsonToType(works),
         prices = TypeConverter.jsonToType(prices),
+        tips =  TypeConverter.jsonToType(tips),
         durations = TypeConverter.jsonToType(durations),
         notes = TypeConverter.jsonToType(notes)
     )
@@ -54,6 +56,7 @@ data class ClientEntity(
             works = TypeConverter.toJson(client.works),
             prices = TypeConverter.toJson(client.prices),
             durations = TypeConverter.toJson(client.durations),
+            tips = TypeConverter.toJson(client.tips),
             notes = TypeConverter.toJson(client.notes)
         )
     }

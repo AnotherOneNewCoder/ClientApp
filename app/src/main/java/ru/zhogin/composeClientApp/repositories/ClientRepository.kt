@@ -10,4 +10,6 @@ interface ClientRepository {
     fun searchClient(searchQuery: String): Flow<List<Client>>
     suspend fun removeById(id: Long)
     suspend fun saveClient(client: Client)
+
+    suspend fun getClientById(id: Long) : Client
 }

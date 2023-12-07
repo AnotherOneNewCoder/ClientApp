@@ -12,6 +12,7 @@ data class Client(
     val visits: List<String> = emptyList(),
     val works: List<String> = emptyList(),
     val prices: List<Double> = emptyList(),
+    val tips: List<Double> = emptyList(),
     val durations: List<Double> = emptyList(),
     val notes: List<String> = emptyList(),
 )

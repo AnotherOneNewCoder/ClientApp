@@ -18,6 +18,8 @@ data class CalendarDayEventEntity(
     val color: ColorTypeEmbedded,
     val start: String,
     val end: String,
+    val done: Boolean = false,
+    val clientId: Long,
     val description: String? = null
 ) {
     fun toDto() = CalendarDayEvent(
@@ -27,7 +29,9 @@ data class CalendarDayEventEntity(
         color = color.toDto(),
         start = LocalDateTime.parse(start),
         end = LocalDateTime.parse(end),
-        description = description
+        done = done,
+        clientId = clientId,
+        description = description,
     )
 
     companion object{
@@ -38,7 +42,9 @@ data class CalendarDayEventEntity(
             color = ColorTypeEmbedded.fromDto(calendarDayEvent.color),
             start = calendarDayEvent.start.toString(),
             end = calendarDayEvent.end.toString(),
-            description = calendarDayEvent.description
+            done = calendarDayEvent.done,
+            clientId = calendarDayEvent.clientId,
+            description = calendarDayEvent.description,
         )
     }
 }

@@ -12,11 +12,15 @@ import androidx.navigation.navArgument
 import ru.zhogin.composeClientApp.compose.screens.CalendarDayAndEventsScreen
 import ru.zhogin.composeClientApp.compose.screens.CalendarScreen
 import ru.zhogin.composeClientApp.compose.screens.ClientAvatarFullSizeScreen
+import ru.zhogin.composeClientApp.compose.screens.ClientFullInfoScreen
 import ru.zhogin.composeClientApp.compose.screens.NewClientScreen
 import ru.zhogin.composeClientApp.compose.screens.NotesScreen
+import ru.zhogin.composeClientApp.compose.screens.SelectUserScreen
 import ru.zhogin.composeClientApp.compose.screens.SettingScreen
+import ru.zhogin.composeClientApp.compose.screens.SuccessfulCalendarDayEvent
 import ru.zhogin.composeClientApp.compose.screens.UsersScreen
 import ru.zhogin.composeClientApp.navigation.NavigationScreens
+import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
@@ -28,13 +32,21 @@ fun NavGraph(
 
 ) {
     val sharedClientViewModel: ClientViewModule = hiltViewModel()
+    val sharedClientViewModelForCalendar: ClientViewModule = hiltViewModel()
     val sharedCalendarDayViewModel: CalendarDayViewModel = hiltViewModel()
+    val sharedCalendarDayEventViewModel: CalendarDayEventViewModel = hiltViewModel()
+
+
     NavHost(navController = navHostController, startDestination = "calendar") {
         composable("calendar") {
             CalendarScreen(
                 calendarDayViewModel = sharedCalendarDayViewModel,
+                calendarDayEventViewModel = sharedCalendarDayEventViewModel,
                 onNavigationCalendarDayAndEventsScreen = {
                     navHostController.navigate(NavigationScreens.CalendarDayAndEventsScreen.route)
+                },
+                onNavigationSuccessfulCalendarDayEvent = {
+                    navHostController.navigate(NavigationScreens.SuccessfulCalendarDayEvent.route)
                 },
             )
         }
@@ -49,6 +61,9 @@ fun NavGraph(
                 },
                 onNavigationEditClient = {
                     navHostController.navigate(NavigationScreens.NewClient.route)
+                },
+                onNavigationClientFullInfoScreen = {
+                    navHostController.navigate(NavigationScreens.ClientFullInfoScreen.route)
                 }
             )
         }
@@ -78,8 +93,31 @@ fun NavGraph(
         }
         composable(NavigationScreens.CalendarDayAndEventsScreen.route) {
             CalendarDayAndEventsScreen(
+                clientViewModule = sharedClientViewModelForCalendar,
                 calendarDayViewModel = sharedCalendarDayViewModel,
-                onNavigationBack = {navHostController.navigateUp()}
+                onNavigationBack = {navHostController.navigateUp()},
+                onNavigateToSelectClientScreen = {
+                    navHostController.navigate(NavigationScreens.SelectUserScreen.route)
+                }
+            )
+        }
+        composable(NavigationScreens.SelectUserScreen.route) {
+            SelectUserScreen(
+                clientViewModule = sharedClientViewModelForCalendar,
+                onNavigateUp = {navHostController.navigateUp()}
+            )
+        }
+        composable(NavigationScreens.SuccessfulCalendarDayEvent.route) {
+            SuccessfulCalendarDayEvent(
+                calendarDayEventViewModel = sharedCalendarDayEventViewModel,
+                onNavigateToCalendarScreen = {
+                    navHostController.navigate("calendar")
+                }
+            )
+        }
+        composable(NavigationScreens.ClientFullInfoScreen.route) {
+            ClientFullInfoScreen(
+                clientViewModule = sharedClientViewModel
             )
         }
     }

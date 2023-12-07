@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.time.LocalDate
@@ -20,6 +21,7 @@ fun BasicDayHeader(
     Text(
         text = day.format(DayFormatter),
         textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold,
         modifier = modifier
             .fillMaxWidth()
             .padding(4.dp)

@@ -71,4 +71,19 @@ class ClientViewModule @Inject constructor(
         _photo.value = noAvatar
     }
 
+//    fun getClientById(id: Long) = repository.getClientById(id).flowOn(Dispatchers.Default)
+
+
+    fun getClientById(id: Long): Client {
+
+        viewModelScope.launch {
+            try {
+                 editedClient.value = repository.getClientById(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return editedClient.value!!
+    }
+
 }

@@ -1,10 +1,8 @@
 package ru.zhogin.composeClientApp.compose.client
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,13 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.compose.alertdialog.MyAlertDialog
 import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.MyTransperent
@@ -44,47 +38,25 @@ import ru.zhogin.composeClientApp.ui.theme.Purple40
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ClientListItem(
+fun SelectClientListItem(
     client: Client,
-    onClick: () -> Unit,
-    onClickEdit: () -> Unit,
-    onLongClickClientName: () -> Unit,
     clientViewModule: ClientViewModule = hiltViewModel(),
+    onNavigateUp: () -> Unit,
 ) {
 
-    val openAlertDialog = remember {
-        mutableStateOf(false)
-    }
-    when (openAlertDialog.value) {
-        true -> {
-            MyAlertDialog(
-                onDismissRequest = { openAlertDialog.value = false },
-                onConfirmation = {
-                    clientViewModule.removeClientById(client.id)
-                    openAlertDialog.value = false
-                },
-                dialogTitle = "Delete",
-                dialogText = "Are you sure?"
-            )
-        }
-
-        else -> {}
-    }
     val fullNameText =
-        if (!client.patronymicSurname.isNullOrBlank()) client.surname + " " + client.name + " " + client.patronymicSurname
-        else client.surname + " " + client.name
+        if (!client.patronymicSurname.isNullOrBlank()) client.name + " " + client.surname + " " + client.patronymicSurname
+        else client.name + " " + client.surname
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .background(MyTransperent)
             .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-
-
-            //.horizontalScroll(rememberScrollState())
-                ,
+        //.horizontalScroll(rememberScrollState())
+        ,
         shape = RoundedCornerShape(32.dp),
         border = BorderStroke(1.dp, Purple40)
     ) {
@@ -105,43 +77,24 @@ fun ClientListItem(
                         .padding(4.dp)
                         .size(64.dp)
                         .clip(CircleShape)
-                        .clickable {
-                            onClick()
-                        }
+
 
                 ) {
                     it.error(R.drawable.no_avatar)
                         .placeholder(R.drawable.no_avatar)
                 }
-                Box {
-                    Text(
-                        text = client.id.toString(),
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .background(Color.White, shape = CircleShape)
 
-                    )
-                }
 
             }
 
 
             Column(
-
-
-                //.background(Color.Transparent),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-
                     text = fullNameText,
-                    modifier = Modifier.background(Color.Transparent).combinedClickable(
-                        enabled = true,
-                        onClick = {},
-                        onLongClick = { onLongClickClientName() }
-                    )
-                    ,
+                    modifier = Modifier.background(Color.Transparent),
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
@@ -157,24 +110,19 @@ fun ClientListItem(
                 modifier = Modifier.padding(end = 12.dp)
             ) {
                 IconButton(
-                    onClick = { onClickEdit() },
-                    modifier = Modifier.size(32.dp),
+                    onClick = {
+                        onNavigateUp()
+                              },
+                    modifier = Modifier.size(64.dp),
 
                     ) {
                     Icon(
-                        Icons.Filled.Create, contentDescription = "Edit",
+                        Icons.Filled.Done, contentDescription = "Select",
                     )
-                }
-                IconButton(
-                    onClick = {
-                        openAlertDialog.value = true
-                    },
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete")
+
                 }
             }
-        }
 
+        }
     }
 }

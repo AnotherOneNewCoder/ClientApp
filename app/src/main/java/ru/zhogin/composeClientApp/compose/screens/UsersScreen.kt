@@ -49,6 +49,7 @@ fun UsersScreen(
     onNavigationNewClient: () -> Unit,
     onNavigationAvatarFullSize: () -> Unit,
     onNavigationEditClient: () -> Unit,
+    onNavigationClientFullInfoScreen: () -> Unit,
     ) {
 
 
@@ -141,6 +142,10 @@ fun UsersScreen(
                                     onNavigationEditClient()
 
 
+                                },
+                                onLongClickClientName = {
+                                    clientViewModule.editedClient.value = client
+                                    onNavigationClientFullInfoScreen()
                                 }
 
                             )
@@ -169,7 +174,9 @@ fun UsersScreen(
                                     )
 
 
-                                })
+                                },
+                                onLongClickClientName = {}
+                            )
                         }
                     }
                 }

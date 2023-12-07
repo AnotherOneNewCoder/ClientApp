@@ -1,6 +1,8 @@
 package ru.zhogin.composeClientApp.compose.screens
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -14,6 +16,7 @@ import ru.zhogin.composeClientApp.compose.bottomnav.NavGraph
 import ru.zhogin.composeClientApp.ui.theme.MyTransperent
 
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

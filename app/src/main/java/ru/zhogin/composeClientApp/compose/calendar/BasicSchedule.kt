@@ -27,8 +27,12 @@ fun BasicSchedule(
     modifier: Modifier = Modifier,
     minDate: LocalDate? = calendarDayEvents.minByOrNull(CalendarDayEvent::start)?.start?.toLocalDate(),
     maxDate: LocalDate? = calendarDayEvents.minByOrNull(CalendarDayEvent::end)?.end?.toLocalDate(),
+    onClickDelete: (calendarDayEvent: CalendarDayEvent) -> Unit,
+    onClickDone: (calendarDayEvent: CalendarDayEvent) -> Unit,
     calendarDayEventContent: @Composable (calendarDayEvent: CalendarDayEvent) -> Unit = { BasicCalendarEvent(
-        dayEvent = it
+        dayEvent = it,
+        onClickDelete = { onClickDelete(it) },
+        onClickDone = { onClickDone(it) }
     )},
     hourHeight: Dp,
     dayWidth: Dp,

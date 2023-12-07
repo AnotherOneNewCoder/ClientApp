@@ -37,4 +37,18 @@ class ClientRepositoryImpl @Inject constructor(
             e.printStackTrace()
         }
     }
+
+//    override fun getClientById(id: Long): Flow<Client> = clientDao.getByID(id).map {
+//        it.toDto()
+//    }.flowOn(Dispatchers.Default)
+
+    override suspend fun getClientById(id: Long): Client {
+
+            val client = clientDao.getByID(id).toDto()
+            return client ?: throw Exception()
+
+
+    }
+
+
 }

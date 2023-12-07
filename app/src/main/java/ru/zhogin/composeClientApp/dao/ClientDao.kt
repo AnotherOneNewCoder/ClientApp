@@ -13,7 +13,7 @@ interface ClientDao {
 
     suspend fun save(client: ClientEntity) =
         if (client.id == 0L) insert(client) else updateClientByID(client.id, client.dateOfBirth, client.name, client.surname, client.patronymicSurname, client.durations, client.prices,client.photo,
-            client.notes, client.telNumber, client.visits, client.works)
+            client.notes, client.telNumber, client.visits, client.works, client.tips)
 
     @Insert
     suspend fun insert(client: ClientEntity)
@@ -31,12 +31,13 @@ interface ClientDao {
                notes = :notes,
                telNumber = :telNumber,
                visits = :visits,
-               works = :works
+               works = :works,
+               tips = :tips
            WHERE id = :id
         """
     )
     suspend fun updateClientByID(id: Long, dateOfBirth: String?, name: String, surname: String, patronymicSurname: String? ,durations: String?, prices: String?, photo: String?, notes: String?,
-                                 telNumber: String, visits: String?, works: String?)
+                                 telNumber: String, visits: String?, works: String?, tips: String?)
 
 
     @Query("DELETE FROM ClientEntity WHERE id = :id")

@@ -39,6 +39,7 @@ import com.mabn.calendarlibrary.ExpandableCalendar
 import com.mabn.calendarlibrary.core.calendarDefaultTheme
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
 import ru.zhogin.composeClientApp.R
+import ru.zhogin.composeClientApp.compose.alertdialog.MyAlertDialog
 import ru.zhogin.composeClientApp.compose.calendar.CustomDay
 import ru.zhogin.composeClientApp.compose.calendar.CustomMonthHeader
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
@@ -47,6 +48,7 @@ import ru.zhogin.composeClientApp.dto.ColorType
 import ru.zhogin.composeClientApp.ui.theme.MyWhite
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.Purple40
+import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -56,16 +58,27 @@ import java.util.Calendar
 @Composable
 fun CalendarScreen(
     calendarDayViewModel: CalendarDayViewModel = hiltViewModel(),
+    calendarDayEventViewModel: CalendarDayEventViewModel = hiltViewModel(),
     onNavigationCalendarDayAndEventsScreen: () -> Unit,
+    onNavigationSuccessfulCalendarDayEvent: (calendarDayEvent: CalendarDayEvent) -> Unit,
 ) {
 
     val listOfCalendarDaysInDb = calendarDayViewModel.data.collectAsState(initial = emptyList())
+    val listOfCalendarDayEventsInDb = calendarDayEventViewModel.data.collectAsState(initial = emptyList())
 
 
 
     val date = remember {
-        mutableStateOf("")
+        mutableStateOf(LocalDate.now().toString())
     }
+
+    val displayListOfCalendarDayEvents = listOfCalendarDayEventsInDb.value.filter { calendarDayEvent ->
+          calendarDayEvent.date == LocalDate.parse(date.value)
+    }
+    val calendarDayEventId = remember {
+        mutableStateOf(0L)
+    }
+
 //    val date = remember {
 //        mutableStateOf<LocalDate>(LocalDate.now())
 //    }
@@ -73,36 +86,35 @@ fun CalendarScreen(
     val weekends = remember {
         mutableStateOf("")
     }
-    val sampleCalendarEvents = listOf(
+//    val sampleCalendarEvents = listOf(
+//
+//        CalendarDayEvent(
+//            name = "Клиент 134",
+//            color = ColorType.WHITE,
+//            start = LocalDateTime.parse("2021-05-18T10:00:00"),
+//            end = LocalDateTime.parse("2021-05-18T11:00:00"),
+//            id = 0L,
+//            date = LocalDate.parse("2021-05-18"),
+//            description = "Tune in to find out about how we're furthering our mission to organize the world’s information and make it universally accessible and useful.",
+//        ),
+    val openAlertDialog = remember {
+        mutableStateOf(false)
+    }
+    when (openAlertDialog.value) {
+        true -> {
+            MyAlertDialog(
+                onDismissRequest = { openAlertDialog.value = false },
+                onConfirmation = {
+                    calendarDayEventViewModel.removeDayEventById(calendarDayEventId.value)
+                    openAlertDialog.value = false
+                },
+                dialogTitle = "Delete",
+                dialogText = "Are you sure?"
+            )
+        }
 
-        CalendarDayEvent(
-            name = "Клиент 134",
-            color = ColorType.WHITE,
-            start = LocalDateTime.parse("2021-05-18T10:00:00"),
-            end = LocalDateTime.parse("2021-05-18T11:00:00"),
-            id = 0L,
-            date = LocalDate.parse("2021-05-18"),
-            description = "Tune in to find out about how we're furthering our mission to organize the world’s information and make it universally accessible and useful.",
-        ),
-        CalendarDayEvent(
-            name = "Клиент 186",
-            color = ColorType.GREEN,
-            start = LocalDateTime.parse("2021-05-18T15:15:00"),
-            end = LocalDateTime.parse("2021-05-18T16:00:00"),
-            id = 1L,
-            date = LocalDate.parse("2021-05-18"),
-            description = "Learn about the latest updates to our developer products and platforms from Google Developers.",
-        ),
-        CalendarDayEvent(
-            name = "Клиент 234",
-            color = ColorType.WHITE,
-            start = LocalDateTime.parse("2021-05-18T01:50:00"),
-            end = LocalDateTime.parse("2021-05-18T03:20:00"),
-            id = 2L,
-            date = LocalDate.parse("2021-05-18"),
-            description = "In this Keynote, Chet Haase, Dan Sandler, and Romain Guy discuss the latest Android features and enhancements for developers.",
-        ),
-        )
+        else -> {}
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -167,8 +179,7 @@ fun CalendarScreen(
                         )
 
 
-                        Text(text = date.value.toString())
-                        Text(text = weekends.value.toString())
+
 
                         Schedule(
                             modifier = Modifier.padding(start = 24.dp, bottom = 44.dp)
@@ -177,7 +188,16 @@ fun CalendarScreen(
 //                                    rememberScrollState())
 
                             ,
-                            calendarDayEvents = sampleCalendarEvents)
+                            calendarDayEvents = displayListOfCalendarDayEvents,
+                            onClickDelete = {
+                                calendarDayEventId.value = it.id
+                                openAlertDialog.value = true
+                            },
+                            onClickDone = {
+                                calendarDayEventViewModel.editedDayEvent.value = it
+                                onNavigationSuccessfulCalendarDayEvent(it)
+                            }
+                            )
 
 
                     }
