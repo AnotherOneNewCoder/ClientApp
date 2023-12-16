@@ -213,6 +213,7 @@ fun NewClientScreen(
                         )
                     clientViewModule.saveClient()
                     Toast.makeText(context, R.string.client_added , Toast.LENGTH_SHORT).show()
+                    clientViewModule.clearData()
                     onNavigation()
                 } else
                     Toast.makeText(context, R.string.fields_name_and_surname_should_be_filled , Toast.LENGTH_SHORT).show()

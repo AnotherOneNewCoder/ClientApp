@@ -2,7 +2,6 @@ package ru.zhogin.composeClientApp.compose.client
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ru.zhogin.composeClientApp.R
@@ -35,14 +33,13 @@ import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.MyTransperent
 import ru.zhogin.composeClientApp.ui.theme.Purple40
-import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SelectClientListItem(
     client: Client,
-    clientViewModule: ClientViewModule = hiltViewModel(),
+   // clientViewModule: ClientViewModule = hiltViewModel(),
     onNavigateUp: () -> Unit,
 ) {
 

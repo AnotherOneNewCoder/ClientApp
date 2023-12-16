@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.client.DataTableListItem
 import ru.zhogin.composeClientApp.dto.ClientInfo
+import ru.zhogin.composeClientApp.services.MyUtils
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
@@ -54,7 +55,7 @@ fun ClientFullInfoScreen(
         val listOfWorks = client.works.asReversed()
         val listOfPrices = client.prices.asReversed()
         val listOfTips = client.tips.asReversed()
-        val listOfDurations = client.durations.asReversed()
+//        val listOfDurations = client.durations.asReversed()
         val listOfNotes = client.notes.asReversed()
 
         val dataList = mutableListOf<ClientInfo>()
@@ -66,7 +67,7 @@ fun ClientFullInfoScreen(
                     work = listOfWorks[i],
                     prices = listOfPrices[i],
                     tips = listOfTips[i],
-                    durations = listOfDurations[i],
+//                    durations = listOfDurations[i],
                     notes = listOfNotes[i],
                 )
             )
@@ -76,7 +77,7 @@ fun ClientFullInfoScreen(
             when (index) {
                 0 -> 75.dp
                 1 -> 150.dp
-                5 -> 150.dp
+                4 -> 150.dp
                 else -> 100.dp
             }
         }
@@ -86,8 +87,8 @@ fun ClientFullInfoScreen(
                 1 -> stringResource(id = R.string.work)
                 2 -> stringResource(id = R.string.price)
                 3 -> stringResource(id = R.string.tips)
-                4 -> stringResource(id = R.string.duration)
-                5 -> stringResource(id = R.string.note)
+//                4 -> stringResource(id = R.string.duration)
+                4 -> stringResource(id = R.string.note)
                 else -> ""
             }
             Text(
@@ -105,10 +106,10 @@ fun ClientFullInfoScreen(
             val value = when (index) {
                 0 -> item.visit
                 1 -> item.work
-                2 -> item.prices.toString()
-                3 -> item.tips.toString()
-                4 -> item.durations.toString()
-                5 -> item.notes
+                2 -> MyUtils.priceToDouble(item.prices).toString()
+                3 -> MyUtils.priceToDouble(item.tips).toString()
+//                4 -> MyUtils.durationToHour(item.durations).toString()
+                4 -> item.notes
                 else -> ""
             }
             Text(
@@ -124,11 +125,11 @@ fun ClientFullInfoScreen(
         val fullNameText =
             if (!client.patronymicSurname.isNullOrBlank()) client.surname + " " + client.name + " " + client.patronymicSurname
             else client.surname + " " + client.name
-        val totalPrice = listOfPrices.sumOf { it }
-        val estimatedTime = listOfDurations.sumOf { it }
-        val totalTips = listOfTips.sumOf { it }
-        val df = DecimalFormat("#.#")
-        val costOfHour = df.format(totalPrice / estimatedTime)
+        val totalPrice = MyUtils.priceToDouble(listOfPrices.sumOf { it })
+//        val estimatedTime = MyUtils.durationToHour(listOfDurations.sumOf { it })
+        val totalTips = MyUtils.priceToDouble(listOfTips.sumOf { it })
+//        val df = DecimalFormat("#.#")
+//        val costOfHour = df.format(totalPrice / estimatedTime)
         Scaffold(
             floatingActionButton = {
                 FloatingActionButton(
@@ -193,7 +194,7 @@ fun ClientFullInfoScreen(
 
                         //        Box(contentAlignment = Alignment.TopStart) {
                         DataTableListItem(
-                            columnCount = 6,
+                            columnCount = 5,
                             cellWidth = cellWidth,
                             data = dataList,
                             headerCellContent = headerCellTitle,
@@ -246,14 +247,14 @@ fun ClientFullInfoScreen(
                             text = stringResource(id = R.string.total_tips_earned_from_client) + " $totalTips",
                             modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
                         )
-                        Text(
-                            text = stringResource(id = R.string.estimated_time_spent_on_client) + " $estimatedTime",
-                            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.cost_an_hour_of_work_on_this_client) + " $costOfHour",
-                            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
-                        )
+//                        Text(
+//                            text = stringResource(id = R.string.estimated_time_spent_on_client) + " $estimatedTime",
+//                            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+//                        )
+//                        Text(
+//                            text = stringResource(id = R.string.cost_an_hour_of_work_on_this_client) + " $costOfHour",
+//                            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp)
+//                        )
 
                     }
                 }

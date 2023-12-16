@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.GenderType
+import ru.zhogin.composeClientApp.services.MyUtils
 
 import ru.zhogin.composeClientApp.ui.theme.MyBlue
 import ru.zhogin.composeClientApp.ui.theme.MyGrey
@@ -62,17 +63,18 @@ fun SuccessfulCalendarDayEvent(
     val clientName =
         "${client?.surname}" + " " + "${client?.name}" + " " + "${client?.patronymicSurname}"
 
-    val start = calendarDayEventViewModel.editedDayEvent.value?.start
-    val end = calendarDayEventViewModel.editedDayEvent.value?.end
-
-    val calculateDuration = ChronoUnit.MINUTES.between(start, end)
-    val df = DecimalFormat("#.#")
-    val hours = df.format(calculateDuration.toDouble() / 60)
+//    val start = calendarDayEventViewModel.editedDayEvent.value?.start
+//    val end = calendarDayEventViewModel.editedDayEvent.value?.end
+//
+//    val calculateDuration = ChronoUnit.MINUTES.between(start, end)
+//    val df = DecimalFormat("#.#")
+    //val hours = df.format(calculateDuration.toDouble() / 60)
+//    val hours = df.format(MyUtils.durationToHour(calculateDuration))
     val date = calendarDayEventViewModel.editedDayEvent.value?.date?.format(DayFormatter).toString()
 
-    val duration = remember {
-        mutableStateOf(hours)
-    }
+//    val duration = remember {
+//        mutableStateOf(hours)
+//    }
     val typeOfWork = remember {
         mutableStateOf("")
     }
@@ -86,6 +88,7 @@ fun SuccessfulCalendarDayEvent(
         mutableStateOf("")
     }
     val context = LocalContext.current
+    val listDuration = clientViewModule.editedClient.value?.durations
 
 
     Column(
@@ -138,12 +141,12 @@ fun SuccessfulCalendarDayEvent(
                 )
 
 
-                OutlinedTextField(
-                    value = duration.value,
-                    onValueChange = { duration.value = it },
-                    label = { Text(text = stringResource(id = R.string.duration)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                )
+//                OutlinedTextField(
+//                    value = duration.value,
+//                    onValueChange = { duration.value = it },
+//                    label = { Text(text = stringResource(id = R.string.duration)) },
+//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+//                )
 
                 OutlinedTextField(
                     value = price.value,
@@ -193,19 +196,24 @@ fun SuccessfulCalendarDayEvent(
                                     it
                                 )
                             }
+//                            val addDuration = MyUtils.durationToMinute(duration.value.toDouble())
+//                            val newListDuration = listDuration?.plus(addDuration)
                            clientViewModule.editedClient.value =
                                clientViewModule.editedClient.value?.let {
-                                   clientViewModule.editedClient.value?.copy(
-                                       visits = it.visits.plus(date),
-                                       works = it.works.plus(typeOfWork.value.ifBlank { "haircut" }),
-                                       durations = it.durations.plus(duration.value.toDouble()),
-                                       prices = it.prices.plus(price.value.toDouble()),
-                                       notes = it.notes.plus(note.value.ifBlank { "-" }),
-                                       tips = it.tips.plus(
-                                           if (tips.value.isNotBlank()) tips.value.toDouble()
-                                           else 0.00
+//                                   newListDuration?.let { it1 ->
+                                       clientViewModule.editedClient.value?.copy(
+                                           visits = it.visits.plus(date),
+                                           works = it.works.plus(typeOfWork.value.ifBlank { "haircut" }),
+                                           //durations = it.durations.plus(MyUtils.durationToMinute(duration.value.toDouble())),
+                                           //durations = it1,
+                                           prices = it.prices.plus(MyUtils.priceToLong(price.value.toDouble())),
+                                           notes = it.notes.plus(note.value.ifBlank { "-" }),
+                                           tips = it.tips.plus(
+                                               if (tips.value.isNotBlank()) MyUtils.priceToLong(tips.value.toDouble())
+                                               else 0L
+                                           )
                                        )
-                                   )
+//                                   }
                                }
 
 //                            clientViewModule.editedClient.value =

@@ -44,8 +44,7 @@ class ClientRepositoryImpl @Inject constructor(
 
     override suspend fun getClientById(id: Long): Client {
 
-            val client = clientDao.getByID(id).toDto()
-            return client ?: throw Exception()
+        return clientDao.getByID(id).toDto()
 
 
     }
