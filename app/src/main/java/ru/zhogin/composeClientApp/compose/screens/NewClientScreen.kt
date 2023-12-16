@@ -1,6 +1,6 @@
 package ru.zhogin.composeClientApp.compose.screens
 
-import android.net.Uri
+
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -64,9 +64,7 @@ fun NewClientScreen(
     val checkedSwitcher = remember {
         mutableStateOf(false)
     }
-    val imageUri = remember {
-        mutableStateOf<Uri?>(null)
-    }
+
     val imageUri2 = remember {
         mutableStateOf(clientViewModule.editedClient.value?.photo)
     }
@@ -112,7 +110,7 @@ fun NewClientScreen(
                     fontSize = 20.sp
                 ),
                 label = {
-                    Text(text = "Name")
+                    Text(text = stringResource(id = R.string.name))
                 },
                 value = clientName.value.toString(),
                 onValueChange = {
@@ -125,7 +123,7 @@ fun NewClientScreen(
                     fontSize = 20.sp
                 ),
                 label = {
-                    Text(text = "Surname")
+                    Text(text = stringResource(id = R.string.surname))
                 },
                 value = clientSurname.value.toString(),
                 onValueChange = {
@@ -138,7 +136,7 @@ fun NewClientScreen(
                     fontSize = 20.sp
                 ),
                 label = {
-                    Text(text = "Patronymic surname")
+                    Text(text = stringResource(id = R.string.patronymic_surname))
                 },
                 value = clientPatronymicSurname.value.toString(),
                 onValueChange = {
@@ -156,7 +154,7 @@ fun NewClientScreen(
                     clientPhone.value = it
                 },
                 label = {
-                    Text(text = "Phone")
+                    Text(text = stringResource(id = R.string.phone))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone
@@ -175,7 +173,7 @@ fun NewClientScreen(
                     clientDateOfBirth.value = it
                 },
                 label = {
-                    Text(text = "Date of Birth")
+                    Text(text = stringResource(id = R.string.date_of_birth))
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal
@@ -183,7 +181,7 @@ fun NewClientScreen(
             )
             Row {
                 Text(
-                    text = "Female",
+                    text = stringResource(id = R.string.female),
                     modifier = Modifier.padding(top = 10.dp, end = 8.dp),
                     fontSize = 16.sp,
                 )
@@ -191,7 +189,7 @@ fun NewClientScreen(
                     checkedSwitcher.value = it
                 })
                 Text(
-                    text = "Male",
+                    text = stringResource(id = R.string.male),
                     modifier = Modifier.padding(start = 8.dp, top = 10.dp),
                     fontSize = 16.sp,
                 )
@@ -214,9 +212,10 @@ fun NewClientScreen(
                             dateOfBirth = clientDateOfBirth.value.toString(),
                         )
                     clientViewModule.saveClient()
+                    Toast.makeText(context, R.string.client_added , Toast.LENGTH_SHORT).show()
                     onNavigation()
                 } else
-                    Toast.makeText(context, "Fields Name and Surname should be filled!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.fields_name_and_surname_should_be_filled , Toast.LENGTH_SHORT).show()
             }) {
                 Text(
                     text = stringResource(id = R.string.add),

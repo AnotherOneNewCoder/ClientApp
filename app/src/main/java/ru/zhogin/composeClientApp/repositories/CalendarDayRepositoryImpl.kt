@@ -8,15 +8,28 @@ import ru.zhogin.composeClientApp.dao.CalendarDayDao
 import ru.zhogin.composeClientApp.dto.CalendarDay
 import ru.zhogin.composeClientApp.entity.CalendarDayEntity
 import ru.zhogin.composeClientApp.entity.toCalendarDayList
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-
+private val dateFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd")
 class CalendarDayRepositoryImpl @Inject constructor(
     private val calendarDayDao: CalendarDayDao
 ) : CalendarDayRepository {
     override val data: Flow<List<CalendarDay>> = calendarDayDao.getAll().map {
+        it.forEach {calendarDayEntity ->
+            if ((LocalDate.parse(calendarDayEntity.date, dateFormatter).plusYears(2)) < LocalDate.now()) {
+                calendarDayDao.removeByID(calendarDayEntity.id)
+            }
+        }
         it.toCalendarDayList()
     }.flowOn(Dispatchers.Default)
 
+
+
+//    listOfCalendarDaysInDb.value.forEach { calendarDay ->
+//        if ((LocalDate.parse(calendarDay.date, dateFormatter).plusYears(2)) < LocalDate.now() )
+//            calendarDayViewModel.removeDayById(calendarDay.id)
+//    }
 
     override suspend fun removeById(id: Long) {
         try {

@@ -15,7 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.IconButton
-import androidx.compose.material.TextFieldColors
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
@@ -25,8 +25,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.ColorType
 import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.ui.theme.MyGrey
@@ -48,11 +47,14 @@ import ru.zhogin.composeClientApp.ui.theme.Pink80
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-private val DayFormatter = DateTimeFormatter.ofPattern("EE, MMM d")
+//private val DayFormatter = DateTimeFormatter.ofPattern("EE, MMM d")
+private val DayFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,7 +113,9 @@ fun CalendarDayAndEventsScreen(
         }, hour, minute, true
     )
     Column(
-        modifier = Modifier.fillMaxSize().background(MyGrey),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MyGrey),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -176,7 +180,7 @@ fun CalendarDayAndEventsScreen(
                     Text(
                         color = Color.Black,
                         fontSize = 22.sp,
-                        text = "Start time: ${time.value}",
+                        text = stringResource(id = R.string.start_time) + " ${time.value}",
                     )
 
                 }
@@ -192,58 +196,74 @@ fun CalendarDayAndEventsScreen(
                     Text(
                         color = Color.Black,
                         fontSize = 22.sp,
-                        text = "End time: ${endTime.value}",
+                        text = stringResource(id = R.string.end_time) + " ${endTime.value}",
                     )
 
                 }
-                TextField(
+                OutlinedTextField(
+                    value = description.value,
+                    onValueChange = { description.value = it },
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .background(Pink80),
                     textStyle = TextStyle(
                         color = Color.Black,
                         fontSize = 22.sp,
-
                         ),
                     label = {
-                        Text(text = "Description")
+                        Text(text = stringResource(id = R.string.description))
                     },
-                    colors = TextFieldDefaults.textFieldColors(containerColor = Pink80),
-                    value = description.value,
-                    onValueChange = {
-                        description.value = it
-                    })
 
 
-                Row {
-                    Checkbox(
-                        checked = checkedStateWorkingDay.value,
-                        onCheckedChange = { checkedStateWorkingDay.value = it },
-                        modifier = Modifier.padding(top = 16.dp,)
                     )
-                    Text(
-                        "Working day", fontSize = 22.sp,
-                        color = Color.Black,
-                        modifier = Modifier.padding(top = 23.dp)
-                    )
-                }
+//                    TextField(
+//                        modifier = Modifier
+//                            .padding(top = 16.dp)
+//                            .background(Pink80),
+//                        textStyle = TextStyle(
+//                            color = Color.Black,
+//                            fontSize = 22.sp,
+//
+//                            ),
+//                        label = {
+//                            Text(text = "Description")
+//                        },
+//                        colors = TextFieldDefaults.textFieldColors(containerColor = Pink80),
+//                        value = description.value,
+//                        onValueChange = {
+//                            description.value = it
+//                        })
 
-                Row {
-                    Checkbox(
-                        checked = checkedStateWeekend.value,
-                        onCheckedChange = { checkedStateWeekend.value = it },
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                    Text(
-                        "Weekend", fontSize = 22.sp,
-                        color = Color.Black,
-                        modifier = Modifier.padding(top = 23.dp)
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 8.dp),
+
+                            Row {
+                        Checkbox(
+                            checked = checkedStateWorkingDay.value,
+                            onCheckedChange = { checkedStateWorkingDay.value = it },
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        Text(
+                            stringResource(id = R.string.working_day), fontSize = 22.sp,
+                            color = Color.Black,
+                            modifier = Modifier.padding(top = 23.dp)
+                        )
+                    }
+
+                            Row {
+                        Checkbox(
+                            checked = checkedStateWeekend.value,
+                            onCheckedChange = { checkedStateWeekend.value = it },
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        Text(
+                            stringResource(id = R.string.weekend), fontSize = 22.sp,
+                            color = Color.Black,
+                            modifier = Modifier.padding(top = 23.dp)
+                        )
+                    }
+                            Box (
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 8.dp),
                     contentAlignment = Alignment.BottomEnd
                 ) {
                     FloatingActionButton(

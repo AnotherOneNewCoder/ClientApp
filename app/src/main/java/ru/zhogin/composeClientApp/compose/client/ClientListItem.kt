@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,8 +66,8 @@ fun ClientListItem(
                     clientViewModule.removeClientById(client.id)
                     openAlertDialog.value = false
                 },
-                dialogTitle = "Delete",
-                dialogText = "Are you sure?"
+                dialogTitle = stringResource(id = R.string.delete),
+                dialogText = stringResource(id = R.string.are_you_sure)
             )
         }
 
@@ -136,11 +137,13 @@ fun ClientListItem(
                 Text(
 
                     text = fullNameText,
-                    modifier = Modifier.background(Color.Transparent).combinedClickable(
-                        enabled = true,
-                        onClick = {},
-                        onLongClick = { onLongClickClientName() }
-                    )
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .combinedClickable(
+                            enabled = true,
+                            onClick = {},
+                            onLongClick = { onLongClickClientName() }
+                        )
                     ,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center

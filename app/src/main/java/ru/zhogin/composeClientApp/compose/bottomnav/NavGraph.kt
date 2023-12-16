@@ -5,10 +5,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import ru.zhogin.composeClientApp.compose.screens.CalendarDayAndEventsScreen
 import ru.zhogin.composeClientApp.compose.screens.CalendarScreen
 import ru.zhogin.composeClientApp.compose.screens.ClientAvatarFullSizeScreen
@@ -117,7 +115,10 @@ fun NavGraph(
         }
         composable(NavigationScreens.ClientFullInfoScreen.route) {
             ClientFullInfoScreen(
-                clientViewModule = sharedClientViewModel
+                clientViewModule = sharedClientViewModel,
+                onNavigationBack = {
+                    navHostController.navigateUp()
+                }
             )
         }
     }

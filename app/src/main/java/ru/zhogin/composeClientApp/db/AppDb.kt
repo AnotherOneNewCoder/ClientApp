@@ -16,7 +16,8 @@ import ru.zhogin.composeClientApp.entity.ClientEntity
         CalendarDayEntity::class,
         CalendarDayEventEntity::class,
     ],
-    version = 1
+    version = 1,
+    exportSchema = true,
 )
 abstract class AppDb: RoomDatabase() {
     abstract fun clientDao(): ClientDao
