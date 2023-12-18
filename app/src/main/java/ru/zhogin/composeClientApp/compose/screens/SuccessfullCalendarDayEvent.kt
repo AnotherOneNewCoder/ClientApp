@@ -35,16 +35,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.services.MyUtils
-
 import ru.zhogin.composeClientApp.ui.theme.MyBlue
 import ru.zhogin.composeClientApp.ui.theme.MyGrey
 import ru.zhogin.composeClientApp.ui.theme.MyPink
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
-import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+
 private val DayFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 @Composable
 fun SuccessfulCalendarDayEvent(
@@ -88,7 +86,7 @@ fun SuccessfulCalendarDayEvent(
         mutableStateOf("")
     }
     val context = LocalContext.current
-    val listDuration = clientViewModule.editedClient.value?.durations
+    //val listDuration = clientViewModule.editedClient.value?.durations
 
 
     Column(
@@ -166,16 +164,7 @@ fun SuccessfulCalendarDayEvent(
                     onValueChange = { note.value = it },
                     label = { Text(text = stringResource(id = R.string.note)) }
                 )
-                clientViewModule.editedClient.value?.telNumber?.let {
-                    Text(
-                        modifier = Modifier.padding(top = 8.dp),
-                        color = Color.Black,
-                        fontSize = 26.sp,
-                        //text = calendarDayDate.value.toString(),
-                        text = it,
 
-                        )
-                }
 
                 Box(
                     modifier = Modifier
@@ -203,9 +192,9 @@ fun SuccessfulCalendarDayEvent(
 //                                   newListDuration?.let { it1 ->
                                        clientViewModule.editedClient.value?.copy(
                                            visits = it.visits.plus(date),
-                                           works = it.works.plus(typeOfWork.value.ifBlank { "haircut" }),
+                                           works = it.works.plus(typeOfWork.value.ifBlank { "-" }),
                                            //durations = it.durations.plus(MyUtils.durationToMinute(duration.value.toDouble())),
-                                           //durations = it1,
+                                           durations = it.durations.plus(0L),
                                            prices = it.prices.plus(MyUtils.priceToLong(price.value.toDouble())),
                                            notes = it.notes.plus(note.value.ifBlank { "-" }),
                                            tips = it.tips.plus(
@@ -216,35 +205,7 @@ fun SuccessfulCalendarDayEvent(
 //                                   }
                                }
 
-//                            clientViewModule.editedClient.value =
-//                                clientViewModule.editedClient.value?.works?.let { work ->
-//                                    clientViewModule.editedClient.value?.visits?.let { visit ->
-//                                        clientViewModule.editedClient.value?.durations?.let { durations ->
-//                                            clientViewModule.editedClient.value?.prices?.let { prices ->
-//                                                clientViewModule.editedClient.value?.notes?.let { notes ->
-//                                                    clientViewModule.editedClient.value?.tips?.let { listTips ->
-//                                                        clientViewModule.editedClient.value?.copy(
-//                                                            visits = visit.plus(
-//                                                                date
-//                                                            ),
-//                                                            works = work.plus(
-//                                                                typeOfWork.value.ifBlank { "haircut" }),
-//                                                            //durations = durations.plus(duration.value.toDouble()),
-//                                                            durations = durations.plusElement(duration.value.toDouble()),
-//                                                            prices = prices.plus(price.value.toDouble()),
-//                                                            notes = notes.plus(
-//                                                                note.value.ifBlank { "-" }),
-//                                                            tips = listTips.plus(
-//                                                                if (tips.value.isNotBlank()) tips.value.toDouble()
-//                                                                else 0.00
-//                                                            )
-//                                                        )
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//                                }
+
 
                             clientViewModule.saveClient()
                             Toast.makeText(context, R.string.event_created, Toast.LENGTH_SHORT).show()

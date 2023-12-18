@@ -34,12 +34,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.client.DataTableListItem
 import ru.zhogin.composeClientApp.dto.ClientInfo
+import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.services.MyUtils
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
-import java.text.DecimalFormat
+
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -75,7 +76,7 @@ fun ClientFullInfoScreen(
         }
         val cellWidth: (Int) -> Dp = { index ->
             when (index) {
-                0 -> 75.dp
+                0 -> 100.dp
                 1 -> 150.dp
                 4 -> 150.dp
                 else -> 100.dp
@@ -114,7 +115,7 @@ fun ClientFullInfoScreen(
             }
             Text(
                 text = value,
-                fontSize = 10.sp,
+                fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(8.dp),
                 maxLines = 1,
@@ -185,14 +186,15 @@ fun ClientFullInfoScreen(
                         )
                     }
                     Text(
-                        text = client.gender.name,
+                        text = if (client.gender == GenderType.MALE) stringResource(id = R.string.male)
+                        else stringResource(id = R.string.female),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(start = 14.dp, bottom = 14.dp, end = 14.dp)
                     )
                     if (client.visits.isNotEmpty()) {
 
-                        //        Box(contentAlignment = Alignment.TopStart) {
+
                         DataTableListItem(
                             columnCount = 5,
                             cellWidth = cellWidth,
@@ -200,44 +202,7 @@ fun ClientFullInfoScreen(
                             headerCellContent = headerCellTitle,
                             cellContent = cellText
                         )
-//                    LazyRow(
-//                        modifier = Modifier.padding(top = 8.dp)
-//
-//                    ) {
-//                        item {
-//                            DataClientListItem(
-//                                visit = "visit", work = "work", price = "price", tips = "tips",
-//                                duration = "duration", note = "note", width = 95,
-//                            )
-//                        }
-//                        itemsIndexed(listOfWorks) { index, _ ->
-//                            DataClientListItem(
-//                                visit = listOfVisits[index],
-//                                work = listOfWorks[index],
-//                                price = listOfPrices[index].toString(),
-//                                tips = listOfTips[index].toString(),
-//                                duration = listOfDurations[index].toString(),
-//                                note = listOfNotes[index],
-//                                width = 120
-//                            )
-//                        }
-//
-////                    items(count) {
-////                        var i = 0
-////                        DataClientListItem(
-////                            visit = listOfVisits[i],
-////                            work = listOfWorks[i],
-////                            price = listOfPrices[i].toString(),
-////                            tips = listOfTips[i].toString(),
-////                            duration = listOfDurations[i].toString(),
-////                            note = listOfNotes[i],
-////                            width = 110,
-////                        )
-////                        i +=1
-////                    }
-//
-//
-//                    }
+
 
                         Text(
                             text = stringResource(id = R.string.total_price_earned_from_client) + " $totalPrice",

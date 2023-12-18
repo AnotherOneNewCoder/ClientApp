@@ -166,8 +166,7 @@ fun NewClientScreen(
                     fontSize = 20.sp
                 ),
                 value = clientDateOfBirth.value.toString()
-//                if (clientViewModule.editedClient.value?.dateOfBirth.isNullOrBlank()){ "" }
-//                else clientDateOfBirth.value.toString()
+
                 ,
                 onValueChange = {
                     clientDateOfBirth.value = it
@@ -198,19 +197,22 @@ fun NewClientScreen(
             TextButton(onClick = {
                 if (!clientName.value.isNullOrBlank() && !clientSurname.value.isNullOrBlank()) {
                     clientViewModule.editedClient.value =
-                        clientViewModule.editedClient.value?.copy(
-                            name = clientName.value.toString(),
-                            surname = clientSurname.value.toString(),
-                            patronymicSurname = clientPatronymicSurname.value.toString(),
-                            telNumber = clientPhone.value.toString(),
-                            gender = when (checkedSwitcher.value) {
-                                false -> GenderType.FEMALE
-                                true -> GenderType.MALE
 
-                            },
-                            photo = imageUri2.value.toString(),
-                            dateOfBirth = clientDateOfBirth.value.toString(),
-                        )
+                            clientViewModule.editedClient.value?.copy(
+                                name = clientName.value.toString(),
+                                surname = clientSurname.value.toString(),
+                                patronymicSurname = clientPatronymicSurname.value.toString(),
+                                telNumber = clientPhone.value.toString(),
+                                gender = when (checkedSwitcher.value) {
+                                    false -> GenderType.FEMALE
+                                    true -> GenderType.MALE
+
+                                },
+                                photo = imageUri2.value.toString(),
+                                dateOfBirth = clientDateOfBirth.value.toString(),
+
+                            )
+
                     clientViewModule.saveClient()
                     Toast.makeText(context, R.string.client_added , Toast.LENGTH_SHORT).show()
                     clientViewModule.clearData()

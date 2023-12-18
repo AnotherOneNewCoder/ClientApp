@@ -30,7 +30,7 @@ import ru.zhogin.composeClientApp.ui.theme.MyGreyEvent
 import ru.zhogin.composeClientApp.ui.theme.MyPink
 import java.time.format.DateTimeFormatter
 
-val calendarDayEventFormatter = DateTimeFormatter.ofPattern("HH:mm")
+val calendarDayEventFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 @Composable
 fun BasicCalendarEvent(
@@ -67,13 +67,29 @@ fun BasicCalendarEvent(
                 }",
                 fontSize = 14.sp,
             )
-            if(!dayEvent.done) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
 
 
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Row {
+                    if (!dayEvent.done) {
+                        IconButton(
+                            onClick = {
+                                onClickDone(dayEvent)
+                            },
+                            modifier = Modifier
+                                .size(20.dp)
+
+
+                        ) {
+                            Icon(
+                                Icons.Filled.Done, contentDescription = "Done",
+                                //tint = MyBlueDark
+                            )
+                        }
+                    }
                     IconButton(
                         onClick = {
                             onClickDelete(dayEvent)
@@ -89,52 +105,36 @@ fun BasicCalendarEvent(
 
 
                 }
+
+
+
             }
 
 
         }
 
-        Row {
-            Text(
-                text = dayEvent.name,
-                //style = MaterialTheme.typography.body1,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-            if(!dayEvent.done) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    IconButton(
-                        onClick = {
-                            onClickDone(dayEvent)
-                        },
-                        modifier = Modifier
-                            .size(20.dp)
 
-                    ) {
-                        Icon(
-                            Icons.Filled.Done, contentDescription = "Done",
-                            //tint = MyBlueDark
-                        )
-                    }
+        Text(
+            text = dayEvent.name,
+            //style = MaterialTheme.typography.body1,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
 
-                }
-            }
 
-        }
-
-        if (dayEvent.description != null) {
-            Text(
-                text = dayEvent.description,
-                style = MaterialTheme.typography.body2,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-        }
     }
 
+    if (dayEvent.description != null) {
+        Text(
+            text = dayEvent.description,
+            style = MaterialTheme.typography.body2,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
 
+    }
 }
+
+
+
+

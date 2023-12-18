@@ -2,6 +2,7 @@ package ru.zhogin.composeClientApp.compose.client
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
@@ -32,7 +34,7 @@ import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.MyTransperent
-import ru.zhogin.composeClientApp.ui.theme.Purple40
+
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -55,7 +57,7 @@ fun SelectClientListItem(
         //.horizontalScroll(rememberScrollState())
         ,
         shape = RoundedCornerShape(32.dp),
-        border = BorderStroke(1.dp, Purple40)
+        border = BorderStroke(1.dp, Color.Black)
     ) {
 
         Row(
@@ -64,6 +66,7 @@ fun SelectClientListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Brize)
+                .horizontalScroll(rememberScrollState())
 
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {

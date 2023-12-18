@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mabn.calendarlibrary.CalendarViewModel
+
 import io.github.boguszpawlowski.composecalendar.day.DayState
 import io.github.boguszpawlowski.composecalendar.selection.SelectionState
 import ru.zhogin.composeClientApp.ui.theme.Brize2
@@ -35,7 +35,7 @@ import java.time.LocalDate
  * @param onClick callback for interacting with day clicks
  */
 @Composable
-public fun <T : SelectionState> CustomDay(
+fun <T : SelectionState> CustomDay(
     state: DayState<T>,
     modifier: Modifier = Modifier,
     selectionColor: Color = MyBlue,
@@ -76,8 +76,8 @@ public fun <T : SelectionState> CustomDay(
             .padding(2.dp),
         elevation = if (state.isFromCurrentMonth) 4.dp else 0.dp,
         border = if (state.isCurrentDay) BorderStroke(1.dp, currentDayColor) else null,
-        contentColor = if (isSelectedWorkingDay.contains(date.toString())) MyRed
-        else if (isSelectedWeekend.contains(date.toString())) Brize2
+        contentColor = if (isSelectedWorkingDay.contains(date.toString())) Brize2
+        else if (isSelectedWeekend.contains(date.toString())) MyRed
         else if (isSelected) selectionColor
         else contentColorFor(
             backgroundColor = MaterialTheme.colors.surface

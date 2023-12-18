@@ -4,32 +4,24 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,12 +35,12 @@ import ru.zhogin.composeClientApp.compose.calendar.CustomMonthHeader
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
 import ru.zhogin.composeClientApp.ui.theme.Orange
-import ru.zhogin.composeClientApp.ui.theme.Purple40
+import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import java.time.LocalDate
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun CalendarScreen(
@@ -58,17 +50,19 @@ fun CalendarScreen(
     onNavigationSuccessfulCalendarDayEvent: (calendarDayEvent: CalendarDayEvent) -> Unit,
 ) {
 
-    
-    val listOfCalendarDayEventsInDb = calendarDayEventViewModel.data.collectAsState(initial = emptyList())
+
+    val listOfCalendarDayEventsInDb =
+        calendarDayEventViewModel.data.collectAsState(initial = emptyList())
 
 
     val date = remember {
         mutableStateOf(LocalDate.now().toString())
     }
 
-    val displayListOfCalendarDayEvents = listOfCalendarDayEventsInDb.value.filter { calendarDayEvent ->
-          calendarDayEvent.date == LocalDate.parse(date.value)
-    }
+    val displayListOfCalendarDayEvents =
+        listOfCalendarDayEventsInDb.value.filter { calendarDayEvent ->
+            calendarDayEvent.date == LocalDate.parse(date.value)
+        }
     val calendarDayEventId = remember {
         mutableStateOf(0L)
     }
@@ -98,94 +92,80 @@ fun CalendarScreen(
         else -> {}
     }
     Scaffold(
-        floatingActionButtonPosition = FabPosition.End,
-        floatingActionButton = {FloatingActionButton(
-            onClick = {
-                weekends.value = date.value
-                onNavigationCalendarDayAndEventsScreen()
-            },
-            backgroundColor = Orange,
+        floatingActionButtonPosition = androidx.compose.material.FabPosition.End,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    weekends.value = date.value
+                    onNavigationCalendarDayAndEventsScreen()
+                },
+                backgroundColor = Orange,
 
-            ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add")
-        }},
-        bottomBar = {BottomNavigationView(navController = navController)}
+                ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add")
+            }
+        },
+        bottomBar = { BottomNavigationView(navController = navController) },
+        backgroundColor = PurpleGrey40,
+
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            content = {
-                Box(modifier = with(Modifier) {
-                    fillMaxSize()
-                        .background(Color.Black)
-                        .paint(
-                            painterResource(id = R.drawable.cat_profile),
-                            contentScale = ContentScale.Crop
-                        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 60.dp, start = 4.dp, end = 4.dp),
+            shape = RoundedCornerShape(32.dp),
+            border = BorderStroke(1.dp, Color.Black),
+
+        ) {
 
 
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                }, contentAlignment = Alignment.TopCenter)
-
-                {
-                    Card(
-                        modifier = Modifier.padding(top = 4.dp, bottom = 54.dp),
-                        shape = RoundedCornerShape(32.dp),
-                        border = BorderStroke(1.dp, Purple40)
-                    ) {
-
-
-                        Column(
-                            modifier = Modifier
-
-
-                            ,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-
-                            SelectableCalendar(
-                                modifier = Modifier.size(320.dp),
-                                dayContent = { CustomDay(state = it,
-                                    onClick = { clickedDay ->
-                                        date.value = clickedDay.toString()
-                                        calendarDayViewModel.editedSelectedDay.value = clickedDay
-                                    })},
-                                monthHeader = { CustomMonthHeader(monthState = it)}
-                            )
+                SelectableCalendar(
+                    modifier = Modifier.size(320.dp),
+                    dayContent = {
+                        CustomDay(state = it,
+                            onClick = { clickedDay ->
+                                date.value = clickedDay.toString()
+                                calendarDayViewModel.editedSelectedDay.value = clickedDay
+                            })
+                    },
+                    monthHeader = { CustomMonthHeader(monthState = it) }
+                )
 
 
 
 
-                            Schedule(
-                                modifier = Modifier.padding(start = 18.dp,
+                Schedule(
+                    modifier = Modifier.padding(
+                        start = 18.dp,
 
-                                )
-
-
-                                ,
-                                calendarDayEvents = displayListOfCalendarDayEvents,
-                                onClickDelete = {
-                                    calendarDayEventId.value = it.id
-                                    openAlertDialog.value = true
-                                },
-                                onClickDone = {
-                                    calendarDayEventViewModel.editedDayEvent.value = it
-                                    onNavigationSuccessfulCalendarDayEvent(it)
-                                }
-                            )
-
-
-                        }
-
-
+                        ),
+                    calendarDayEvents = displayListOfCalendarDayEvents,
+                    onClickDelete = {
+                        calendarDayEventId.value = it.id
+                        openAlertDialog.value = true
+                    },
+                    onClickDone = {
+                        calendarDayEventViewModel.editedDayEvent.value = it
+                        onNavigationSuccessfulCalendarDayEvent(it)
                     }
-                }
+                )
+
+
             }
 
 
-        )
+        }
     }
-
-
-
-
 }
+
+
+
+
+
+
+
+

@@ -23,14 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.compose.client.ClientListItem
 import ru.zhogin.composeClientApp.compose.client.SelectClientListItem
 import ru.zhogin.composeClientApp.ui.theme.Brize2
-import ru.zhogin.composeClientApp.ui.theme.Pink80
+
 import ru.zhogin.composeClientApp.ui.theme.PinkTrans
+import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +60,7 @@ fun SelectUserScreen(
 
         Box(modifier = with(Modifier) {
             fillMaxSize()
-                .background(Pink80)
+                .background(PurpleGrey40)
 
         }) {
             Column {
@@ -103,7 +102,7 @@ fun SelectUserScreen(
                 LazyColumn(
                     modifier = Modifier
                         .background(PinkTrans)
-                        .padding(bottom = 108.dp)
+                        .padding(bottom = 8.dp)
                 ) {
                     if (searchText.value.isEmpty()) {
                         items(listClient.value) { client ->
