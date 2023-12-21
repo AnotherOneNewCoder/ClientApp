@@ -89,7 +89,7 @@ dependencies {
     implementation "io.github.boguszpawlowski.composecalendar:composecalendar:$calendar_version"
 
     // to delete
-    implementation 'com.github.mateusz800:Expandable-Compose-Calendar:v1.0.0'
+
 
 
 
