@@ -121,18 +121,20 @@ fun BasicCalendarEvent(
             fontWeight = FontWeight.Bold,
         )
 
+        if (dayEvent.description != null) {
+            Text(
+                text = dayEvent.description,
+                style = MaterialTheme.typography.body2,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+        }
+
 
     }
 
-    if (dayEvent.description != null) {
-        Text(
-            text = dayEvent.description,
-            style = MaterialTheme.typography.body2,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
 
-    }
 }
 
 
