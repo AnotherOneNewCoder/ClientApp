@@ -43,6 +43,7 @@ import ru.zhogin.composeClientApp.compose.alertdialog.MyAlertDialog
 import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.MyTransperent
+import ru.zhogin.composeClientApp.ui.theme.Orange
 
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
@@ -99,7 +100,7 @@ fun ClientListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Brize)
-                .horizontalScroll(rememberScrollState())
+
 
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {
@@ -143,11 +144,13 @@ fun ClientListItem(
                     text = fullNameText,
                     modifier = Modifier
                         .background(Color.Transparent)
+                        .fillMaxWidth(0.85f)
                         .combinedClickable(
                             enabled = true,
                             onClick = {},
                             onLongClick = { onLongClickClientName() }
                         )
+                        .horizontalScroll(rememberScrollState())
                     ,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
@@ -170,6 +173,7 @@ fun ClientListItem(
                     ) {
                     Icon(
                         Icons.Filled.Create, contentDescription = "Edit",
+
                     )
                 }
                 IconButton(
@@ -178,7 +182,8 @@ fun ClientListItem(
                     },
                     modifier = Modifier.size(32.dp)
                 ) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete")
+                    Icon(Icons.Filled.Delete, contentDescription = "Delete",
+                       )
                 }
             }
         }

@@ -1,6 +1,8 @@
 package ru.zhogin.composeClientApp.compose.screens
 
+import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +14,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
@@ -39,11 +43,14 @@ import ru.zhogin.composeClientApp.ui.theme.MyBlue
 import ru.zhogin.composeClientApp.ui.theme.MyGrey
 import ru.zhogin.composeClientApp.ui.theme.MyPink
 import ru.zhogin.composeClientApp.ui.theme.Orange
+import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 import java.time.format.DateTimeFormatter
 
 private val DayFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SuccessfulCalendarDayEvent(
     calendarDayEventViewModel: CalendarDayEventViewModel = hiltViewModel(),
@@ -87,56 +94,115 @@ fun SuccessfulCalendarDayEvent(
     }
     val context = LocalContext.current
     //val listDuration = clientViewModule.editedClient.value?.durations
+    Scaffold(
+        floatingActionButtonPosition = FabPosition.End,
+        floatingActionButton = {
+            FloatingActionButton(
+                backgroundColor = Orange,
+                onClick = {
+                    price.value.ifBlank {
+                        Toast.makeText(
+                            context,
+                            R.string.field_price_should_be_filled,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@FloatingActionButton
+                    }
+
+                    calendarDayEventViewModel.editedDayEvent.value?.id?.let {
+                        calendarDayEventViewModel.setDone(
+                            it
+                        )
+                    }
+//                            val addDuration = MyUtils.durationToMinute(duration.value.toDouble())
+//                            val newListDuration = listDuration?.plus(addDuration)
+                    clientViewModule.editedClient.value =
+                        clientViewModule.editedClient.value?.let {
+//                                   newListDuration?.let { it1 ->
+                            clientViewModule.editedClient.value?.copy(
+                                visits = it.visits.plus(date),
+                                works = it.works.plus(typeOfWork.value.ifBlank { "-" }),
+                                //durations = it.durations.plus(MyUtils.durationToMinute(duration.value.toDouble())),
+                                durations = it.durations.plus(0L),
+                                prices = it.prices.plus(MyUtils.priceToLong(price.value.toDouble())),
+                                notes = it.notes.plus(note.value.ifBlank { "-" }),
+                                tips = it.tips.plus(
+                                    if (tips.value.isNotBlank()) MyUtils.priceToLong(tips.value.toDouble())
+                                    else 0L
+                                )
+                            )
+//                                   }
+                        }
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MyGrey),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+
+                    clientViewModule.saveClient()
+                    Toast.makeText(context, R.string.event_created, Toast.LENGTH_SHORT).show()
+                    calendarDayEventViewModel.clearData()
+                    clientViewModule.clearData()
+                    onNavigateToCalendarScreen()
+                }
+            ) {
+                Icon(Icons.Filled.Done, contentDescription = "Done")
+
+
+            }
+
+        },
+        backgroundColor = PurpleGrey40,
     ) {
 
-        Card(
-            shape = RoundedCornerShape(24.dp),
+
+        Column(
             modifier = Modifier
-                .padding(8.dp)
+                .fillMaxSize()
+                //.background(MyGrey)
+            ,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
 
-                .verticalScroll(rememberScrollState()),
-
-            ) {
-            Column(
+            Card(
+                shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        if (clientViewModule.editedClient.value?.gender == GenderType.MALE) MyBlue
-                        else MyPink
-                    )
-                    .padding(horizontal = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = Color.Black,
-                    fontSize = 26.sp,
-                    //text = calendarDayDate.value.toString(),
-                    text = clientName,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    color = Color.Black,
-                    fontSize = 26.sp,
-                    //text = calendarDayDate.value.toString(),
-                    text = date,
+                    .padding(8.dp)
 
+                    .verticalScroll(rememberScrollState()),
+                border = BorderStroke(1.dp, Color.Black),
+
+                ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            if (clientViewModule.editedClient.value?.gender == GenderType.MALE) MyBlue
+                            else MyPink
+                        )
+                        .padding(horizontal = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Text(
+                        modifier = Modifier.padding(top = 8.dp),
+                        color = Color.Black,
+                        fontSize = 26.sp,
+                        //text = calendarDayDate.value.toString(),
+                        text = clientName,
+                        fontWeight = FontWeight.Bold,
                     )
-                OutlinedTextField(
-                    value = typeOfWork.value,
-                    onValueChange = { typeOfWork.value = it },
-                    label = { Text(text = stringResource(id = R.string.type_of_work)) }
-                )
+                    Text(
+                        modifier = Modifier.padding(top = 8.dp),
+                        color = Color.Black,
+                        fontSize = 26.sp,
+                        //text = calendarDayDate.value.toString(),
+                        text = date,
+
+                        )
+                    OutlinedTextField(
+                        value = typeOfWork.value,
+                        onValueChange = { typeOfWork.value = it },
+                        label = { Text(text = stringResource(id = R.string.type_of_work)) }
+                    )
 
 
 //                OutlinedTextField(
@@ -146,78 +212,27 @@ fun SuccessfulCalendarDayEvent(
 //                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
 //                )
 
-                OutlinedTextField(
-                    value = price.value,
-                    onValueChange = { price.value = it },
-                    label = { Text(text = stringResource(id = R.string.price)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                )
-                OutlinedTextField(
-                    value = tips.value,
-                    onValueChange = { tips.value = it },
-                    label = { Text(text = stringResource(id = R.string.tips)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                )
+                    OutlinedTextField(
+                        value = price.value,
+                        onValueChange = { price.value = it },
+                        label = { Text(text = stringResource(id = R.string.price)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                    )
+                    OutlinedTextField(
+                        value = tips.value,
+                        onValueChange = { tips.value = it },
+                        label = { Text(text = stringResource(id = R.string.tips)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                    )
 
-                OutlinedTextField(
-                    value = note.value,
-                    onValueChange = { note.value = it },
-                    label = { Text(text = stringResource(id = R.string.note)) }
-                )
-
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 8.dp),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    FloatingActionButton(
-                        backgroundColor = Orange,
-                        onClick = {
-                            price.value.ifBlank {
-                                Toast.makeText(context, R.string.field_price_should_be_filled, Toast.LENGTH_SHORT).show()
-                                return@FloatingActionButton
-                            }
-                            
-                            calendarDayEventViewModel.editedDayEvent.value?.id?.let {
-                                calendarDayEventViewModel.setDone(
-                                    it
-                                )
-                            }
-//                            val addDuration = MyUtils.durationToMinute(duration.value.toDouble())
-//                            val newListDuration = listDuration?.plus(addDuration)
-                           clientViewModule.editedClient.value =
-                               clientViewModule.editedClient.value?.let {
-//                                   newListDuration?.let { it1 ->
-                                       clientViewModule.editedClient.value?.copy(
-                                           visits = it.visits.plus(date),
-                                           works = it.works.plus(typeOfWork.value.ifBlank { "-" }),
-                                           //durations = it.durations.plus(MyUtils.durationToMinute(duration.value.toDouble())),
-                                           durations = it.durations.plus(0L),
-                                           prices = it.prices.plus(MyUtils.priceToLong(price.value.toDouble())),
-                                           notes = it.notes.plus(note.value.ifBlank { "-" }),
-                                           tips = it.tips.plus(
-                                               if (tips.value.isNotBlank()) MyUtils.priceToLong(tips.value.toDouble())
-                                               else 0L
-                                           )
-                                       )
-//                                   }
-                               }
+                    OutlinedTextField(
+                        value = note.value,
+                        onValueChange = { note.value = it },
+                        label = { Text(text = stringResource(id = R.string.note)) },
+                        modifier = Modifier.padding(bottom = 32.dp)
+                    )
 
 
-
-                            clientViewModule.saveClient()
-                            Toast.makeText(context, R.string.event_created, Toast.LENGTH_SHORT).show()
-                            calendarDayEventViewModel.clearData()
-                            clientViewModule.clearData()
-                            onNavigateToCalendarScreen()
-                        }
-                    ) {
-                        Icon(Icons.Filled.Done, contentDescription = "Done")
-
-
-                    }
                 }
 
 

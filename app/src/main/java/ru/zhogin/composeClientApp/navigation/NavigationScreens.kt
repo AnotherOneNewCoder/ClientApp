@@ -7,4 +7,5 @@ sealed class NavigationScreens(val route: String) {
     object SelectUserScreen: NavigationScreens("select_user_screen")
     object SuccessfulCalendarDayEvent: NavigationScreens("successful_calendar_day_event")
     object ClientFullInfoScreen: NavigationScreens("client_full_info_screen")
+    object ShowClientNotes: NavigationScreens("show_client_notes")
 }

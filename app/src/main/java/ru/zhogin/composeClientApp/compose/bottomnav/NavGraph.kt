@@ -3,6 +3,8 @@ package ru.zhogin.composeClientApp.compose.bottomnav
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,6 +17,7 @@ import ru.zhogin.composeClientApp.compose.screens.NewClientScreen
 import ru.zhogin.composeClientApp.compose.screens.NotesScreen
 import ru.zhogin.composeClientApp.compose.screens.SelectUserScreen
 import ru.zhogin.composeClientApp.compose.screens.SettingScreen
+import ru.zhogin.composeClientApp.compose.screens.ShowClientNotes
 import ru.zhogin.composeClientApp.compose.screens.SuccessfulCalendarDayEvent
 import ru.zhogin.composeClientApp.compose.screens.UsersScreen
 import ru.zhogin.composeClientApp.navigation.NavigationScreens
@@ -33,6 +36,9 @@ fun NavGraph(
     val sharedClientViewModelForCalendar: ClientViewModule = hiltViewModel()
     val sharedCalendarDayViewModel: CalendarDayViewModel = hiltViewModel()
     val sharedCalendarDayEventViewModel: CalendarDayEventViewModel = hiltViewModel()
+    val note = remember {
+        mutableStateOf("")
+    }
 
 
     NavHost(navController = navHostController, startDestination = "calendar") {
@@ -118,8 +124,20 @@ fun NavGraph(
                 clientViewModule = sharedClientViewModel,
                 onNavigationBack = {
                     navHostController.navigateUp()
+                },
+                onNavigationShowNote = {
+                    note.value = it
+                    navHostController.navigate(NavigationScreens.ShowClientNotes.route)
                 }
             )
+        }
+        composable(NavigationScreens.ShowClientNotes.route) {
+            ShowClientNotes(
+                text = note.value,
+                onNavigationBack = {
+                    navHostController.navigateUp()
+                }
+                )
         }
     }
 }

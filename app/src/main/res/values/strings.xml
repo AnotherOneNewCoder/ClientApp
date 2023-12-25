@@ -33,4 +33,6 @@
     <string name="description">Description</string>
     <string name="working_day">Working day</string>
     <string name="weekend">Weekend</string>
+    <string name="client">Client:</string>
+    <string name="choose_client">You should choose client and time!</string>
 </resources>

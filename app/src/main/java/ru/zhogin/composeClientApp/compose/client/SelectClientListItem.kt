@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -34,7 +35,7 @@ import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize
 import ru.zhogin.composeClientApp.ui.theme.MyTransperent
-
+import ru.zhogin.composeClientApp.ui.theme.Orange
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -66,7 +67,7 @@ fun SelectClientListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Brize)
-                .horizontalScroll(rememberScrollState())
+
 
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {
@@ -94,7 +95,11 @@ fun SelectClientListItem(
             ) {
                 Text(
                     text = fullNameText,
-                    modifier = Modifier.background(Color.Transparent),
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .fillMaxWidth(0.85f)
+                        .horizontalScroll(rememberScrollState())
+                        ,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
@@ -113,11 +118,14 @@ fun SelectClientListItem(
                     onClick = {
                         onNavigateUp()
                               },
+                    enabled = true,
                     modifier = Modifier.size(64.dp),
 
                     ) {
                     Icon(
-                        Icons.Filled.Done, contentDescription = "Select",
+                        Icons.Filled.CheckCircle, contentDescription = "Select",
+                        tint = Orange,
+                        modifier = Modifier.size(48.dp)
                     )
 
                 }

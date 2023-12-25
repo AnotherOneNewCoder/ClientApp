@@ -14,7 +14,7 @@
     <string name="duration">продолжительность</string>
     <string name="note">заметка</string>
     <string name="total_price_earned_from_client">Общая сумма, полученная от клиента:</string>
-    <string name="total_tips_earned_from_client">Общая сумма чаевых, полученных от клиента:</string>
+    <string name="total_tips_earned_from_client">Общая сумма чаевых:</string>
     <string name="estimated_time_spent_on_client">Общее время, затраченное на клиента:</string>
     <string name="cost_an_hour_of_work_on_this_client">Стоимость часа работы с этим клиентом:</string>
     <string name="start_time">Начало:</string>
@@ -34,4 +34,6 @@
     <string name="description">Описание</string>
     <string name="working_day">Рабочий день</string>
     <string name="weekend">Выходной</string>
+    <string name="client">Клиент:</string>
+    <string name="choose_client">Нужно выбрать клиента и время!</string>
 </resources>

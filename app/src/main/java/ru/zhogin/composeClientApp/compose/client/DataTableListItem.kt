@@ -2,6 +2,7 @@ package ru.zhogin.composeClientApp.compose.client
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,6 +25,7 @@ fun <T> DataTableListItem(
     headerCellContent: @Composable (index: Int) -> Unit,
     //cellContent: @Composable (item: String) -> Unit,
     cellContent: @Composable (index: Int, item: T) -> Unit,
+    onShowNotes: (index: Int, item: T) -> Unit,
 ) {
     Surface(modifier = modifier) {
         LazyRow(
@@ -38,13 +40,21 @@ fun <T> DataTableListItem(
                             border = BorderStroke(1.dp, Color.Black),
                             contentColor = Color.Transparent,
                             color = Brize,
-                            modifier = Modifier.width(cellWidth(columnIndex)),
+                            modifier = Modifier.width(cellWidth(columnIndex))
+                                .clickable(
+                                enabled = true,
+                                onClick = {
+                                    if (index > 0) onShowNotes(columnIndex, data[index - 1])
+                                }
+                            )
+                            ,
                         )
                         {
                             if (index == 0) {
                                 headerCellContent(columnIndex)
                             } else {
-                                cellContent(columnIndex, data[index - 1])
+                                cellContent(
+                                    columnIndex, data[index - 1])
                             }
                         }
                     }

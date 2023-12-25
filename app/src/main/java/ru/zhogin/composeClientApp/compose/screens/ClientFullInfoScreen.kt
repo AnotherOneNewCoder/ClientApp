@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
+import ru.zhogin.composeClientApp.R.string.work
 import ru.zhogin.composeClientApp.compose.client.DataTableListItem
 import ru.zhogin.composeClientApp.dto.ClientInfo
 import ru.zhogin.composeClientApp.dto.GenderType
@@ -42,12 +44,12 @@ import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
 
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ClientFullInfoScreen(
     clientViewModule: ClientViewModule = hiltViewModel(),
     onNavigationBack: () -> Unit,
+    onNavigationShowNote: (text: String) -> Unit,
 ) {
     clientViewModule.editedClient.value?.let { editedClient ->
         val client = editedClient
@@ -60,6 +62,7 @@ fun ClientFullInfoScreen(
         val listOfNotes = client.notes.asReversed()
 
         val dataList = mutableListOf<ClientInfo>()
+        val context = LocalContext.current
 
         for (i in 0..(listOfVisits.size - 1)) {
             dataList.add(
@@ -78,18 +81,18 @@ fun ClientFullInfoScreen(
             when (index) {
                 0 -> 100.dp
                 1 -> 150.dp
-                4 -> 150.dp
+                2 -> 150.dp
                 else -> 100.dp
             }
         }
         val headerCellTitle: @Composable (Int) -> Unit = { index ->
             val value = when (index) {
                 0 -> stringResource(id = R.string.visit)
-                1 -> stringResource(id = R.string.work)
-                2 -> stringResource(id = R.string.price)
-                3 -> stringResource(id = R.string.tips)
+                1 -> stringResource(id = work)
+                3 -> stringResource(id = R.string.price)
+                4 -> stringResource(id = R.string.tips)
 //                4 -> stringResource(id = R.string.duration)
-                4 -> stringResource(id = R.string.note)
+                2 -> stringResource(id = R.string.note)
                 else -> ""
             }
             Text(
@@ -107,10 +110,11 @@ fun ClientFullInfoScreen(
             val value = when (index) {
                 0 -> item.visit
                 1 -> item.work
-                2 -> MyUtils.priceToDouble(item.prices).toString()
-                3 -> MyUtils.priceToDouble(item.tips).toString()
+                2 -> item.notes
+
+                4 -> MyUtils.priceToDouble(item.tips).toString()
 //                4 -> MyUtils.durationToHour(item.durations).toString()
-                4 -> item.notes
+                3 -> MyUtils.priceToDouble(item.prices).toString()
                 else -> ""
             }
             Text(
@@ -121,6 +125,20 @@ fun ClientFullInfoScreen(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+        }
+        val onShowNotes: (Int, ClientInfo) -> Unit = { index, item ->
+            when (index) {
+                1 -> {
+                    onNavigationShowNote(item.work)
+
+                }
+
+                2 -> {
+                    onNavigationShowNote(item.notes)
+                }
+
+                else -> Unit
+            }
         }
 
         val fullNameText =
@@ -200,7 +218,8 @@ fun ClientFullInfoScreen(
                             cellWidth = cellWidth,
                             data = dataList,
                             headerCellContent = headerCellTitle,
-                            cellContent = cellText
+                            cellContent = cellText,
+                            onShowNotes = onShowNotes,
                         )
 
 
