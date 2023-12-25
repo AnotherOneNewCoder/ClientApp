@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +17,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -40,7 +41,6 @@ import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.services.MyUtils
 import ru.zhogin.composeClientApp.ui.theme.MyBlue
-import ru.zhogin.composeClientApp.ui.theme.MyGrey
 import ru.zhogin.composeClientApp.ui.theme.MyPink
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
@@ -201,7 +201,17 @@ fun SuccessfulCalendarDayEvent(
                     OutlinedTextField(
                         value = typeOfWork.value,
                         onValueChange = { typeOfWork.value = it },
-                        label = { Text(text = stringResource(id = R.string.type_of_work)) }
+                        label = { Text(text = stringResource(id = R.string.type_of_work),
+                            color = Color.Black,) },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black,
+                            cursorColor = Color.Black,
+                        ),
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontSize = 22.sp,
+                        ),
                     )
 
 
@@ -215,21 +225,51 @@ fun SuccessfulCalendarDayEvent(
                     OutlinedTextField(
                         value = price.value,
                         onValueChange = { price.value = it },
-                        label = { Text(text = stringResource(id = R.string.price)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        label = { Text(text = stringResource(id = R.string.price),
+                            color = Color.Black,) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black,
+                            cursorColor = Color.Black,
+                        ),
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontSize = 22.sp,
+                        ),
                     )
                     OutlinedTextField(
                         value = tips.value,
                         onValueChange = { tips.value = it },
-                        label = { Text(text = stringResource(id = R.string.tips)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                        label = { Text(text = stringResource(id = R.string.tips),
+                            color = Color.Black,) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black,
+                            cursorColor = Color.Black,
+                        ),
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontSize = 22.sp,
+                        ),
                     )
 
                     OutlinedTextField(
                         value = note.value,
                         onValueChange = { note.value = it },
-                        label = { Text(text = stringResource(id = R.string.note)) },
-                        modifier = Modifier.padding(bottom = 32.dp)
+                        label = { Text(text = stringResource(id = R.string.note),
+                            color = Color.Black,) },
+                        modifier = Modifier.padding(bottom = 32.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black,
+                            cursorColor = Color.Black,
+                        ),
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontSize = 22.sp,
+                        ),
                     )
 
 
