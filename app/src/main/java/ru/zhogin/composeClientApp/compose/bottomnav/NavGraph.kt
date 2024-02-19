@@ -2,6 +2,13 @@ package ru.zhogin.composeClientApp.compose.bottomnav
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +38,7 @@ import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 fun NavGraph(
     navHostController: NavHostController,
 
-) {
+    ) {
     val sharedClientViewModel: ClientViewModule = hiltViewModel()
     val sharedClientViewModelForCalendar: ClientViewModule = hiltViewModel()
     val sharedCalendarDayViewModel: CalendarDayViewModel = hiltViewModel()
@@ -41,8 +48,31 @@ fun NavGraph(
     }
 
 
-    NavHost(navController = navHostController, startDestination = "calendar") {
-        composable("calendar") {
+    NavHost(
+        navController = navHostController,
+        startDestination = BottomItem.ScreenFirst.route,
+        enterTransition = {
+        fadeIn(
+            animationSpec = tween(
+                300, easing = LinearEasing
+            )
+        ) + slideIntoContainer(
+            animationSpec = tween(300, easing = EaseIn),
+            towards = AnimatedContentTransitionScope.SlideDirection.Start
+        )
+    },
+        exitTransition = {
+            fadeOut(
+                animationSpec = tween(
+                    300, easing = LinearEasing
+                )
+            ) + slideOutOfContainer(
+                animationSpec = tween(300, easing = EaseOut),
+                towards = AnimatedContentTransitionScope.SlideDirection.End
+            )
+
+        }) {
+        composable(BottomItem.ScreenFirst.route) {
             CalendarScreen(
                 calendarDayViewModel = sharedCalendarDayViewModel,
                 calendarDayEventViewModel = sharedCalendarDayEventViewModel,
@@ -54,7 +84,7 @@ fun NavGraph(
                 },
             )
         }
-        composable("users") {
+        composable(BottomItem.ScreenSecond.route) {
             UsersScreen(
                 clientViewModule = sharedClientViewModel,
                 onNavigationNewClient = {
@@ -71,17 +101,18 @@ fun NavGraph(
                 }
             )
         }
-        composable("notes") {
+        composable(BottomItem.ScreenThird.route) {
             NotesScreen()
         }
-        composable("settings") {
+        composable(BottomItem.ScreenFourth.route) {
             SettingScreen()
         }
         composable(NavigationScreens.NewClient.route) {
-            NewClientScreen (
+            NewClientScreen(
                 clientViewModule = sharedClientViewModel,
-                onNavigation = {navHostController.navigate("users")
-            })
+                onNavigation = {
+                    navHostController.navigate(BottomItem.ScreenSecond.route)
+                })
         }
         composable(
             route = NavigationScreens.AvatarClientFullScreen.route
@@ -91,7 +122,7 @@ fun NavGraph(
             ClientAvatarFullSizeScreen(
                 clientViewModule = sharedClientViewModel,
                 onNavigationUsersScreen = {
-                    navHostController.navigate("users")
+                    navHostController.navigate(BottomItem.ScreenSecond.route)
                 }
             )
         }
@@ -99,7 +130,7 @@ fun NavGraph(
             CalendarDayAndEventsScreen(
                 clientViewModule = sharedClientViewModelForCalendar,
                 calendarDayViewModel = sharedCalendarDayViewModel,
-                onNavigationBack = {navHostController.navigateUp()},
+                onNavigationBack = { navHostController.navigateUp() },
                 onNavigateToSelectClientScreen = {
                     navHostController.navigate(NavigationScreens.SelectUserScreen.route)
                 }
@@ -108,14 +139,14 @@ fun NavGraph(
         composable(NavigationScreens.SelectUserScreen.route) {
             SelectUserScreen(
                 clientViewModule = sharedClientViewModelForCalendar,
-                onNavigateUp = {navHostController.navigateUp()}
+                onNavigateUp = { navHostController.navigateUp() }
             )
         }
         composable(NavigationScreens.SuccessfulCalendarDayEvent.route) {
             SuccessfulCalendarDayEvent(
                 calendarDayEventViewModel = sharedCalendarDayEventViewModel,
                 onNavigateToCalendarScreen = {
-                    navHostController.navigate("calendar")
+                    navHostController.navigate(BottomItem.ScreenFirst.route)
                 }
             )
         }
@@ -137,7 +168,7 @@ fun NavGraph(
                 onNavigationBack = {
                     navHostController.navigateUp()
                 }
-                )
+            )
         }
     }
 }
