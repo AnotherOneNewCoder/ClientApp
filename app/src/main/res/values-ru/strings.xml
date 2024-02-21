@@ -36,4 +36,5 @@
     <string name="weekend">Выходной</string>
     <string name="client">Клиент:</string>
     <string name="choose_client">Нужно выбрать клиента и время!</string>
+    <string name="no_record">Нет записей</string>
 </resources>

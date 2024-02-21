@@ -88,7 +88,8 @@ dependencies {
     //for custom calendar
     implementation "io.github.boguszpawlowski.composecalendar:composecalendar:$calendar_version"
 
-    // to delete
+    // system UI Controller
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.27.0'
 
 
 

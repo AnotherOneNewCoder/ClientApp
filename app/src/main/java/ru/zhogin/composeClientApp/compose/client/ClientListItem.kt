@@ -1,12 +1,10 @@
 package ru.zhogin.composeClientApp.compose.client
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +20,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,20 +32,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.compose.alertdialog.MyAlertDialog
+import ru.zhogin.composeClientApp.compose.alertdialog.DeleteDialogBox
 import ru.zhogin.composeClientApp.dto.Client
-import ru.zhogin.composeClientApp.ui.theme.Brize
-import ru.zhogin.composeClientApp.ui.theme.MyTransperent
-import ru.zhogin.composeClientApp.ui.theme.Orange
-
-import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
+import ru.zhogin.composeClientApp.dto.GenderType
 
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
@@ -55,53 +50,49 @@ fun ClientListItem(
     onClick: () -> Unit,
     onClickEdit: () -> Unit,
     onLongClickClientName: () -> Unit,
-    clientViewModule: ClientViewModule = hiltViewModel(),
+    onRemoveClientById: (Long) -> Unit,
+
 ) {
+    val fullNameText =
+        if (!client.patronymicSurname.isNullOrBlank()) client.surname + " " + client.name + " " + client.patronymicSurname
+        else client.surname + " " + client.name
 
     val openAlertDialog = remember {
         mutableStateOf(false)
     }
     when (openAlertDialog.value) {
         true -> {
-            MyAlertDialog(
+
+            DeleteDialogBox(
                 onDismissRequest = { openAlertDialog.value = false },
-                onConfirmation = {
-                    clientViewModule.removeClientById(client.id)
-                    openAlertDialog.value = false
-                },
-                dialogTitle = stringResource(id = R.string.delete),
-                dialogText = stringResource(id = R.string.are_you_sure)
+                onConfirmation = { onRemoveClientById(client.id)
+                    openAlertDialog.value = false },
+                dialogTitle = stringResource(id = R.string.delete) + "\n${fullNameText}",
+                dialogText = stringResource(id = R.string.are_you_sure),
+                modifier = Modifier,
             )
         }
 
         else -> {}
     }
-    val fullNameText =
-        if (!client.patronymicSurname.isNullOrBlank()) client.surname + " " + client.name + " " + client.patronymicSurname
-        else client.surname + " " + client.name
+
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MyTransperent)
+            .background(Color.White)
             .padding(top = 8.dp, start = 8.dp, end = 8.dp)
 
-
-
-            //.horizontalScroll(rememberScrollState())
                 ,
         shape = RoundedCornerShape(32.dp),
-        border = BorderStroke(1.dp, Color.Black)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Brize)
-
-
         ) {
             Box(contentAlignment = Alignment.BottomEnd) {
                 GlideImage(
@@ -114,58 +105,22 @@ fun ClientListItem(
                         .clickable {
                             onClick()
                         }
-
                 ) {
                     it.error(R.drawable.no_avatar)
                         .placeholder(R.drawable.no_avatar)
                 }
-                Box {
-                    Text(
-                        text = client.id.toString(),
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .background(Color.White, shape = CircleShape)
-
-                    )
-                }
-
-            }
-
-
-            Column(
-
-
-                //.background(Color.Transparent),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-
-                    text = fullNameText,
-                    modifier = Modifier
-                        .background(Color.Transparent)
-                        .fillMaxWidth(0.85f)
-                        .combinedClickable(
-                            enabled = true,
-                            onClick = {},
-                            onLongClick = { onLongClickClientName() }
-                        )
-                        .horizontalScroll(rememberScrollState())
-                    ,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = client.telNumber,
-                    modifier = Modifier.background(Color.Transparent),
-                    fontSize = 20.sp,
-                )
+//                Box {
+//                    Text(
+//                        text = client.id.toString(),
+//                        modifier = Modifier
+//                            .padding(5.dp)
+//                            .background(Color.White, shape = CircleShape)
+//
+//                    )
+//                }
 
             }
-            Column(
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier.padding(end = 12.dp)
-            ) {
+            Column {
                 IconButton(
                     onClick = { onClickEdit() },
                     modifier = Modifier.size(32.dp),
@@ -174,7 +129,7 @@ fun ClientListItem(
                     Icon(
                         Icons.Filled.Create, contentDescription = "Edit",
 
-                    )
+                        )
                 }
                 IconButton(
                     onClick = {
@@ -183,10 +138,61 @@ fun ClientListItem(
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(Icons.Filled.Delete, contentDescription = "Delete",
-                       )
+                    )
                 }
             }
+
+            Column(
+                modifier = Modifier.padding(start = 8.dp),
+            ) {
+                Text(
+
+                    text = fullNameText,
+                    modifier = Modifier
+                        .background(Color.Transparent)
+                        .fillMaxWidth(0.95f)
+                        .combinedClickable(
+                            enabled = true,
+                            onClick = { onLongClickClientName() },
+                            onLongClick = { onLongClickClientName() }
+                        )
+                        .horizontalScroll(rememberScrollState())
+                        .padding(bottom = 8.dp)
+                    ,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = client.telNumber,
+                    modifier = Modifier.background(Color.Transparent),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+            }
+
         }
 
     }
+}
+
+@Preview
+@Composable
+fun ClientListItem_Preview() {
+    val client = Client(
+        id = 22L,
+        telNumber = "+79991120545",
+        photo = null,
+        name = "Ivan",
+        surname = "Zhogin",
+        patronymicSurname = null,
+        dateOfBirth = null,
+        gender = GenderType.MALE
+    )
+    ClientListItem(
+        client = client,
+        onClick = { },
+        onClickEdit = {  },
+        onLongClickClientName = {  },
+        onRemoveClientById = {},
+    )
 }

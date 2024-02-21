@@ -37,7 +37,6 @@ import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 @Composable
 fun NavGraph(
     navHostController: NavHostController,
-
     ) {
     val sharedClientViewModel: ClientViewModule = hiltViewModel()
     val sharedClientViewModelForCalendar: ClientViewModule = hiltViewModel()

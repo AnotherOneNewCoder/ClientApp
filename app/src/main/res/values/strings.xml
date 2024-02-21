@@ -35,4 +35,5 @@
     <string name="weekend">Weekend</string>
     <string name="client">Client:</string>
     <string name="choose_client">You should choose client and time!</string>
+    <string name="no_record">No record</string>
 </resources>
