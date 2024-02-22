@@ -10,8 +10,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -42,7 +45,12 @@ fun NavGraph(
     val sharedClientViewModelForCalendar: ClientViewModule = hiltViewModel()
     val sharedCalendarDayViewModel: CalendarDayViewModel = hiltViewModel()
     val sharedCalendarDayEventViewModel: CalendarDayEventViewModel = hiltViewModel()
-    val note = remember {
+    val note = rememberSaveable {
+        mutableStateOf("")
+    }
+    val listClient = sharedClientViewModel.data.collectAsState(initial = emptyList())
+
+    var clientPhoto by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -90,6 +98,7 @@ fun NavGraph(
                     navHostController.navigate(NavigationScreens.NewClient.route)
                 },
                 onNavigationAvatarFullSize = {
+                    clientPhoto = it
                     navHostController.navigate(NavigationScreens.AvatarClientFullScreen.route)
                 },
                 onNavigationEditClient = {
@@ -97,7 +106,8 @@ fun NavGraph(
                 },
                 onNavigationClientFullInfoScreen = {
                     navHostController.navigate(NavigationScreens.ClientFullInfoScreen.route)
-                }
+                },
+                clientsList = listClient.value
             )
         }
         composable(BottomItem.ScreenThird.route) {
@@ -119,10 +129,10 @@ fun NavGraph(
         ) {
 
             ClientAvatarFullSizeScreen(
-                clientViewModule = sharedClientViewModel,
                 onNavigationUsersScreen = {
                     navHostController.navigate(BottomItem.ScreenSecond.route)
-                }
+                },
+                clientPhoto = clientPhoto,
             )
         }
         composable(NavigationScreens.CalendarDayAndEventsScreen.route) {

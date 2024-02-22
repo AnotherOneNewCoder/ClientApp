@@ -40,6 +40,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.client.ClientListItem
+import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize2
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
@@ -48,14 +49,16 @@ import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 @Composable
 fun UsersScreen(
     clientViewModule: ClientViewModule = hiltViewModel(),
+    // to use viewModel only in navGraph
+    clientsList: List<Client>,
     onNavigationNewClient: () -> Unit,
-    onNavigationAvatarFullSize: () -> Unit,
+    onNavigationAvatarFullSize: (String) -> Unit,
     onNavigationEditClient: () -> Unit,
     onNavigationClientFullInfoScreen: () -> Unit,
 ) {
 
 
-    val listClient = clientViewModule.data.collectAsState(initial = emptyList())
+    //val listClient = clientViewModule.data.collectAsState(initial = emptyList())
 
 
     val searchText = remember {
@@ -136,10 +139,12 @@ fun UsersScreen(
                     .padding(horizontal = 16.dp)
             ) {
                 if (searchText.value.isEmpty()) {
-                    items(listClient.value) { client ->
+                    items(clientsList) { client ->
                         ClientListItem(client = client, onClick = {
-                            clientViewModule.setPhoto(client.photo?.toUri())
-                            onNavigationAvatarFullSize()
+                            //clientViewModule.setPhoto(client.photo?.toUri())
+                            onNavigationAvatarFullSize(
+                                client.photo ?: ""
+                            )
                         },
                             onClickEdit = {
                                 clientViewModule.editedClient.value =
@@ -179,7 +184,7 @@ fun UsersScreen(
                     items(searchListClient.value) { searchClient ->
                         ClientListItem(client = searchClient, onClick = {
                             clientViewModule.setPhoto(searchClient.photo?.toUri())
-                            onNavigationAvatarFullSize()
+                            onNavigationAvatarFullSize(searchClient.photo ?: "")
                         },
                             onClickEdit = {
                                 clientViewModule.editedClient.value =

@@ -2,6 +2,7 @@ package ru.zhogin.composeClientApp.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import ru.zhogin.composeClientApp.entity.ClientEntity
@@ -15,7 +16,7 @@ interface ClientDao {
         if (client.id == 0L) insert(client) else updateClientByID(client.id, client.dateOfBirth, client.name, client.surname, client.patronymicSurname, client.durations, client.prices,client.photo,
             client.notes, client.telNumber, client.visits, client.works, client.tips)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(client: ClientEntity)
 
     @Query(
