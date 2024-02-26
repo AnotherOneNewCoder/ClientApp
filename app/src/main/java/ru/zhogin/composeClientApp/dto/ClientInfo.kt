@@ -7,4 +7,5 @@ data class ClientInfo(
     val tips: Long,
 //    val durations: Long,
     val notes: String,
+    val position: Int,
 )

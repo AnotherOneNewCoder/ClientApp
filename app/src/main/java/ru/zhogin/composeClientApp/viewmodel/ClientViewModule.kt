@@ -52,6 +52,17 @@ class ClientViewModule @Inject constructor(
         }
         editedClient.value = emptyClient
     }
+
+    fun newSaveClient(client: Client) {
+        viewModelScope.launch {
+            try {
+                repository.saveClient(client)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun removeClientById(id: Long) = viewModelScope.launch {
         try {
             repository.removeById(id)

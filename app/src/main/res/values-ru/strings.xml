@@ -37,4 +37,6 @@
     <string name="client">Клиент:</string>
     <string name="choose_client">Нужно выбрать клиента и время!</string>
     <string name="no_record">Нет записей</string>
+    <string name="work_edited">Вид работы был отредактирован!</string>
+    <string name="note_edited">Заметка была отредактирована!</string>
 </resources>

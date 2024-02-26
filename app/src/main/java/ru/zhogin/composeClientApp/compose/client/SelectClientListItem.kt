@@ -1,6 +1,5 @@
 package ru.zhogin.composeClientApp.compose.client
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -17,32 +16,29 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.Client
-import ru.zhogin.composeClientApp.ui.theme.Brize
-import ru.zhogin.composeClientApp.ui.theme.MyTransperent
-import ru.zhogin.composeClientApp.ui.theme.Orange
+import ru.zhogin.composeClientApp.ui.theme.Brize2
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SelectClientListItem(
     client: Client,
-   // clientViewModule: ClientViewModule = hiltViewModel(),
     onNavigateUp: () -> Unit,
 ) {
 
@@ -53,12 +49,11 @@ fun SelectClientListItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MyTransperent)
-            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-        //.horizontalScroll(rememberScrollState())
-        ,
+            .background(Color.White)
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp),
         shape = RoundedCornerShape(32.dp),
-        border = BorderStroke(1.dp, Color.Black)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface)
     ) {
 
         Row(
@@ -66,7 +61,7 @@ fun SelectClientListItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Brize)
+
 
 
         ) {
@@ -90,8 +85,7 @@ fun SelectClientListItem(
 
 
             Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.padding(start = 8.dp),
             ) {
                 Text(
                     text = fullNameText,
@@ -100,32 +94,33 @@ fun SelectClientListItem(
                         .fillMaxWidth(0.85f)
                         .horizontalScroll(rememberScrollState())
                         ,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = client.telNumber,
                     modifier = Modifier.background(Color.Transparent),
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
 
             }
             Column(
                 horizontalAlignment = Alignment.End,
-                modifier = Modifier.padding(end = 12.dp)
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(start = 4.dp, end = 12.dp)
             ) {
                 IconButton(
                     onClick = {
                         onNavigateUp()
                               },
                     enabled = true,
-                    modifier = Modifier.size(64.dp),
+                    modifier = Modifier.size(56.dp),
 
                     ) {
                     Icon(
                         Icons.Filled.CheckCircle, contentDescription = "Select",
-                        tint = Orange,
-                        modifier = Modifier.size(48.dp)
+                        tint = Brize2,
+                        modifier = Modifier.size(28.dp)
                     )
 
                 }

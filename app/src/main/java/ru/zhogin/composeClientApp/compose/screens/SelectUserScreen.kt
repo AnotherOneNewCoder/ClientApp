@@ -1,134 +1,161 @@
 package ru.zhogin.composeClientApp.compose.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.client.SelectClientListItem
+import ru.zhogin.composeClientApp.dto.Client
 import ru.zhogin.composeClientApp.ui.theme.Brize2
-
-import ru.zhogin.composeClientApp.ui.theme.PinkTrans
-import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
-import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectUserScreen(
-    clientViewModule: ClientViewModule = hiltViewModel(),
-    onNavigateUp: () -> Unit,
+    listClient: List<Client>,
+    onNavigateUp: (client: Client) -> Unit,
 
-) {
+    ) {
 
-
-    val listClient = clientViewModule.data.collectAsState(initial = emptyList())
-
-
-    val searchText = remember {
+    val searchText = rememberSaveable {
         mutableStateOf("")
     }
-    val searchListClient =
-        clientViewModule.searchClient(searchText.value).collectAsState(initial = emptyList())
-
-//    var uri: String by remember {
-//        mutableStateOf("")
-//    }
 
 
-    Surface(modifier = Modifier.fillMaxSize()) {
 
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        modifier = Modifier.background(Color.White)
+    ) {
+        Column {
+            SearchBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                colors = SearchBarDefaults.colors(
+                    containerColor = Brize2,
+                    inputFieldColors = TextFieldDefaults.colors(
+                        focusedTextColor = Color.White
+                    )
+                ),
 
-        Box(modifier = with(Modifier) {
-            fillMaxSize()
-                .background(PurpleGrey40)
+                query = searchText.value,
+                onQueryChange = { text ->
+                    searchText.value = text
+                },
+                onSearch = { text ->
+                    searchText.value = text
 
-        }) {
-            Column {
-                SearchBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    colors = SearchBarDefaults.colors(
-                        containerColor = Brize2,
-                        inputFieldColors = TextFieldDefaults.colors(
-                            focusedTextColor = Color.White
+                },
+                placeholder = {
+                    Text(
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        text = stringResource(id = R.string.search),
+
                         )
-                    ),
+                },
+                active = false,
+                onActiveChange = {
 
-                    query = searchText.value,
-                    onQueryChange = { text ->
-                        searchText.value = text
-                    },
-                    onSearch = { text ->
-                        searchText.value = text
-
-                    },
-                    placeholder = {
-                        Text(
-                            fontSize = 20.sp,
-                            color = Color.White,
-                            text = stringResource(id = R.string.search),
-                            modifier = Modifier.padding(start = 12.dp)
-                        )
-                    },
-                    active = false
-
-                    ,
-                    onActiveChange = {
-
-                    }) {
-
-                }
-                LazyColumn(
-                    modifier = Modifier
-                        .background(PinkTrans)
-                        .padding(bottom = 8.dp)
-                ) {
-                    if (searchText.value.isEmpty()) {
-                        items(listClient.value) { client ->
-                            SelectClientListItem(client = client,
-                                onNavigateUp = {
-                                    clientViewModule.editedClient.value = client
-                                    onNavigateUp()
-                                               },
-
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search",
+                        tint = Color.White,
+                        modifier = Modifier.clickable {
+                            //future impl
+                        })
+                },
+                trailingIcon = if (searchText.value.isNotEmpty()) {
+                    {
+                        IconButton(onClick = { searchText.value = "" })
+                        {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = "Close",
+                                tint = Color.White,
                             )
                         }
-                    } else {
-                        items(searchListClient.value) { searchClient ->
-                            SelectClientListItem(client = searchClient, onNavigateUp = {
-                                clientViewModule.editedClient.value = searchClient
-                                onNavigateUp()
-                            })
+                    }
+                } else null
+            ) {
+
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxHeight()
+                    .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
+            ) {
+                if (searchText.value.isEmpty()) {
+                    items(listClient) { client ->
+                        SelectClientListItem(
+                            client = client,
+                            onNavigateUp = {
+                                onNavigateUp(client)
+                            },
+
+                            )
+                    }
+                } else {
+                    val result = ArrayList<Client>()
+                    result.clear()
+                    for (client in listClient) {
+                        if (client.name.lowercase().contains(searchText.value.lowercase())) {
+                            result.add(client)
+                        } else if (client.surname.lowercase()
+                                .contains(searchText.value.lowercase())
+                        ) {
+                            result.add(client)
+                        } else if (client.patronymicSurname?.lowercase()
+                                ?.contains(searchText.value.lowercase()) == true
+                        ) {
+                            result.add(client)
+                        } else if (client.telNumber.lowercase()
+                                .contains(searchText.value.lowercase())
+                        ) {
+                            result.add(client)
                         }
+                    }
+                    items(result) { searchClient ->
+                        SelectClientListItem(client = searchClient, onNavigateUp = {
+                            onNavigateUp(searchClient)
+                        })
                     }
                 }
             }
-
-
-
         }
+
 
     }
 
 }
+

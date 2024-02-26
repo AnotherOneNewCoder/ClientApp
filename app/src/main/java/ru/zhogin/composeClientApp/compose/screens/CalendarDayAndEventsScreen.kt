@@ -48,6 +48,7 @@ import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.dto.ColorType
 import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.ui.theme.Brize
+import ru.zhogin.composeClientApp.ui.theme.Brize2
 import ru.zhogin.composeClientApp.ui.theme.Brize3
 import ru.zhogin.composeClientApp.ui.theme.Orange
 import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
@@ -184,12 +185,12 @@ fun CalendarDayAndEventsScreen(
                         onNavigationBack()
                     }
                 },
-                backgroundColor = Orange,
+                backgroundColor = Brize2,
             ) {
-                Icon(Icons.Filled.Done, contentDescription = "Done")
+                Icon(Icons.Filled.Done, contentDescription = "Done", tint = Color.White)
             }
         },
-        backgroundColor = PurpleGrey40,
+        backgroundColor = Color.White,
     ) {
         Column(
             modifier = Modifier
@@ -204,7 +205,7 @@ fun CalendarDayAndEventsScreen(
                 modifier = Modifier
                     .padding(8.dp)
                     .verticalScroll(rememberScrollState()),
-                border = BorderStroke(1.dp, Color.Black)
+
 
             ) {
 
@@ -233,7 +234,7 @@ fun CalendarDayAndEventsScreen(
                             onClick = { onNavigateToSelectClientScreen() },
                             enabled = true,
                             shape = CircleShape,
-                            colors = ButtonDefaults.textButtonColors(containerColor = Orange)
+                            colors = ButtonDefaults.textButtonColors(containerColor = Brize2)
 
                         ) {
                             Text(
@@ -248,7 +249,7 @@ fun CalendarDayAndEventsScreen(
                             color = Color.Black,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            maxLines = 1,
+                            //maxLines = 1,
                             text = fullName,
                         )
 
@@ -258,7 +259,7 @@ fun CalendarDayAndEventsScreen(
                             onClick = { timePickerDialog.show() },
                             enabled = true,
                             shape = CircleShape,
-                            colors = ButtonDefaults.textButtonColors(containerColor = Orange)
+                            colors = ButtonDefaults.textButtonColors(containerColor = Brize2)
 
                         ) {
                             Text(
@@ -281,7 +282,7 @@ fun CalendarDayAndEventsScreen(
                             onClick = { timePickerDialogEnd.show() },
                             enabled = true,
                             shape = CircleShape,
-                            colors = ButtonDefaults.textButtonColors(containerColor = Orange)
+                            colors = ButtonDefaults.textButtonColors(containerColor = Brize2)
 
                         ) {
                             Text(
@@ -312,9 +313,9 @@ fun CalendarDayAndEventsScreen(
 
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             backgroundColor = Brize3,
-                            focusedBorderColor = Orange,
-                            unfocusedBorderColor = Orange,
-                            cursorColor = Orange,
+                            focusedBorderColor = Brize2,
+                            unfocusedBorderColor = Brize2,
+                            cursorColor = Brize2,
                         ),
                         textStyle = TextStyle(
                             color = Color.Black,
@@ -332,7 +333,7 @@ fun CalendarDayAndEventsScreen(
                             },
                             modifier = Modifier.padding(top = 16.dp),
                             colors = CheckboxDefaults.colors(
-                                checkedColor = Orange,
+                                checkedColor = Brize2,
                                 checkmarkColor = Color.Black
                             )
                         )
@@ -352,7 +353,7 @@ fun CalendarDayAndEventsScreen(
                             },
                             modifier = Modifier.padding(top = 16.dp),
                             colors = CheckboxDefaults.colors(
-                                checkedColor = Orange,
+                                checkedColor = Brize2,
                                 checkmarkColor = Color.Black
                             )
                         )

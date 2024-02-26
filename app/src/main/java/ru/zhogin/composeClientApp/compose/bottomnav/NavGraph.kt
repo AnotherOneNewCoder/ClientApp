@@ -12,6 +12,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -40,7 +41,7 @@ import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 @Composable
 fun NavGraph(
     navHostController: NavHostController,
-    ) {
+) {
     val sharedClientViewModel: ClientViewModule = hiltViewModel()
     val sharedClientViewModelForCalendar: ClientViewModule = hiltViewModel()
     val sharedCalendarDayViewModel: CalendarDayViewModel = hiltViewModel()
@@ -53,21 +54,30 @@ fun NavGraph(
     var clientPhoto by rememberSaveable {
         mutableStateOf("")
     }
+    var noteChanged by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var positionInList by rememberSaveable {
+        mutableIntStateOf(Int.MAX_VALUE)
+    }
+    var noteOrWork by rememberSaveable {
+        mutableStateOf("")
+    }
 
 
     NavHost(
         navController = navHostController,
         startDestination = BottomItem.ScreenFirst.route,
         enterTransition = {
-        fadeIn(
-            animationSpec = tween(
-                300, easing = LinearEasing
+            fadeIn(
+                animationSpec = tween(
+                    300, easing = LinearEasing
+                )
+            ) + slideIntoContainer(
+                animationSpec = tween(300, easing = EaseIn),
+                towards = AnimatedContentTransitionScope.SlideDirection.Start
             )
-        ) + slideIntoContainer(
-            animationSpec = tween(300, easing = EaseIn),
-            towards = AnimatedContentTransitionScope.SlideDirection.Start
-        )
-    },
+        },
         exitTransition = {
             fadeOut(
                 animationSpec = tween(
@@ -84,6 +94,7 @@ fun NavGraph(
                 calendarDayViewModel = sharedCalendarDayViewModel,
                 calendarDayEventViewModel = sharedCalendarDayEventViewModel,
                 onNavigationCalendarDayAndEventsScreen = {
+                    sharedClientViewModel.clearData()
                     navHostController.navigate(NavigationScreens.CalendarDayAndEventsScreen.route)
                 },
                 onNavigationSuccessfulCalendarDayEvent = {
@@ -93,21 +104,60 @@ fun NavGraph(
         }
         composable(BottomItem.ScreenSecond.route) {
             UsersScreen(
-                clientViewModule = sharedClientViewModel,
                 onNavigationNewClient = {
+                    sharedClientViewModel.clearData()
                     navHostController.navigate(NavigationScreens.NewClient.route)
                 },
                 onNavigationAvatarFullSize = {
                     clientPhoto = it
                     navHostController.navigate(NavigationScreens.AvatarClientFullScreen.route)
                 },
-                onNavigationEditClient = {
+                onNavigationEditClient = { client ->
+                    sharedClientViewModel.clearData()
+                    sharedClientViewModel.editedClient.value =
+                        sharedClientViewModel.editedClient.value?.copy(
+                            id = client.id,
+                            telNumber = client.telNumber,
+                            photo = client.photo,
+                            name = client.name,
+                            surname = client.surname,
+                            patronymicSurname = client.patronymicSurname,
+                            dateOfBirth = client.dateOfBirth,
+                            gender = client.gender,
+                            visits = client.visits,
+                            works = client.works,
+                            prices = client.prices,
+                            tips = client.tips,
+                            notes = client.notes,
+                            durations = client.durations,
+
+                            )
                     navHostController.navigate(NavigationScreens.NewClient.route)
                 },
-                onNavigationClientFullInfoScreen = {
+                onNavigationClientFullInfoScreen = { client ->
+                    sharedClientViewModel.clearData()
+                    sharedClientViewModel.editedClient.value =
+                        sharedClientViewModel.editedClient.value?.copy(
+                            id = client.id,
+                            telNumber = client.telNumber,
+                            photo = client.photo,
+                            name = client.name,
+                            surname = client.surname,
+                            patronymicSurname = client.patronymicSurname,
+                            dateOfBirth = client.dateOfBirth,
+                            gender = client.gender,
+                            visits = client.visits,
+                            works = client.works,
+                            prices = client.prices,
+                            tips = client.tips,
+                            notes = client.notes,
+                            durations = client.durations,
+
+                            )
                     navHostController.navigate(NavigationScreens.ClientFullInfoScreen.route)
                 },
-                clientsList = listClient.value
+                clientsList = listClient.value,
+                onRemoveById = { sharedClientViewModel.removeClientById(it) }
             )
         }
         composable(BottomItem.ScreenThird.route) {
@@ -117,11 +167,16 @@ fun NavGraph(
             SettingScreen()
         }
         composable(NavigationScreens.NewClient.route) {
-            NewClientScreen(
-                clientViewModule = sharedClientViewModel,
-                onNavigation = {
-                    navHostController.navigate(BottomItem.ScreenSecond.route)
-                })
+            sharedClientViewModel.editedClient.value?.let { editClient ->
+                NewClientScreen(
+                    onNavigation = { client ->
+                        sharedClientViewModel.newSaveClient(client)
+                        sharedClientViewModel.clearData()
+                        navHostController.navigate(BottomItem.ScreenSecond.route)
+                    },
+                    client = editClient
+                )
+            }
         }
         composable(
             route = NavigationScreens.AvatarClientFullScreen.route
@@ -141,14 +196,36 @@ fun NavGraph(
                 calendarDayViewModel = sharedCalendarDayViewModel,
                 onNavigationBack = { navHostController.navigateUp() },
                 onNavigateToSelectClientScreen = {
+
                     navHostController.navigate(NavigationScreens.SelectUserScreen.route)
                 }
             )
         }
         composable(NavigationScreens.SelectUserScreen.route) {
             SelectUserScreen(
-                clientViewModule = sharedClientViewModelForCalendar,
-                onNavigateUp = { navHostController.navigateUp() }
+                listClient = listClient.value,
+                onNavigateUp = { client ->
+                    sharedClientViewModel.clearData()
+                    sharedClientViewModel.editedClient.value =
+                        sharedClientViewModel.editedClient.value?.copy(
+                            id = client.id,
+                            telNumber = client.telNumber,
+                            photo = client.photo,
+                            name = client.name,
+                            surname = client.surname,
+                            patronymicSurname = client.patronymicSurname,
+                            dateOfBirth = client.dateOfBirth,
+                            gender = client.gender,
+                            visits = client.visits,
+                            works = client.works,
+                            prices = client.prices,
+                            tips = client.tips,
+                            notes = client.notes,
+                            durations = client.durations,
+
+                            )
+                    navHostController.navigateUp()
+                }
             )
         }
         composable(NavigationScreens.SuccessfulCalendarDayEvent.route) {
@@ -160,22 +237,43 @@ fun NavGraph(
             )
         }
         composable(NavigationScreens.ClientFullInfoScreen.route) {
-            ClientFullInfoScreen(
-                clientViewModule = sharedClientViewModel,
-                onNavigationBack = {
-                    navHostController.navigateUp()
-                },
-                onNavigationShowNote = {
-                    note.value = it
-                    navHostController.navigate(NavigationScreens.ShowClientNotes.route)
-                }
-            )
+            sharedClientViewModel.editedClient.value?.let { client ->
+                ClientFullInfoScreen(
+                    client = client,
+                    onNavigationBack = {
+                        noteChanged = false
+                        //sharedClientViewModel.newSaveClient(it)
+                        navHostController.navigate(BottomItem.ScreenSecond.route)
+                        sharedClientViewModel.clearData()
+                    },
+                    onNavigationShowNote = { text, position, workOrNote ->
+                        note.value = text
+                        positionInList = position
+                        noteOrWork = workOrNote
+                        navHostController.navigate(NavigationScreens.ShowClientNotes.route)
+                    },
+                    mutableText = note.value,
+                    changeNote = noteChanged,
+                    changeNotePosition = positionInList,
+                    workOrNote = noteOrWork,
+                    onSaveChanges = {
+                        sharedClientViewModel.newSaveClient(it)
+                        noteChanged = false
+                    }
+                )
+            }
         }
         composable(NavigationScreens.ShowClientNotes.route) {
             ShowClientNotes(
                 text = note.value,
-                onNavigationBack = {
-                    navHostController.navigateUp()
+                onNavigationBack = { text ->
+                    if (note.value != text) {
+                        note.value = text
+                        noteChanged = true
+                    } else {
+                        noteChanged = false
+                    }
+                    navHostController.navigate(NavigationScreens.ClientFullInfoScreen.route)
                 }
             )
         }

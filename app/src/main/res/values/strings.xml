@@ -36,4 +36,6 @@
     <string name="client">Client:</string>
     <string name="choose_client">You should choose client and time!</string>
     <string name="no_record">No record</string>
+    <string name="note_edited">Note was edited!</string>
+    <string name="work_edited">Work was edited!</string>
 </resources>
