@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -66,6 +67,7 @@ fun BasicCalendarEvent(
                     )
                 }",
                 fontSize = 14.sp,
+                color = Color.Black
             )
 
 
@@ -86,7 +88,7 @@ fun BasicCalendarEvent(
                         ) {
                             Icon(
                                 Icons.Filled.Done, contentDescription = "Done",
-                                //tint = MyBlueDark
+                                tint = Color.Black
                             )
                         }
                     }
@@ -99,7 +101,7 @@ fun BasicCalendarEvent(
 
                     ) {
                         Icon(
-                            Icons.Filled.Delete, contentDescription = "Delete", //tint = MyCherry
+                            Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Black
                         )
                     }
 
@@ -119,6 +121,7 @@ fun BasicCalendarEvent(
             //style = MaterialTheme.typography.body1,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
 
         if (dayEvent.description != null) {
@@ -126,7 +129,8 @@ fun BasicCalendarEvent(
                 text = dayEvent.description,
                 style = MaterialTheme.typography.body2,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = Color.Black
             )
 
         }

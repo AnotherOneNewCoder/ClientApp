@@ -2,7 +2,6 @@ package ru.zhogin.composeClientApp.compose.screens
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,12 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.zhogin.composeClientApp.R
-import ru.zhogin.composeClientApp.dto.GenderType
 import ru.zhogin.composeClientApp.services.MyUtils
-import ru.zhogin.composeClientApp.ui.theme.MyBlue
-import ru.zhogin.composeClientApp.ui.theme.MyPink
-import ru.zhogin.composeClientApp.ui.theme.Orange
-import ru.zhogin.composeClientApp.ui.theme.PurpleGrey40
+import ru.zhogin.composeClientApp.ui.theme.Brize2
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.ClientViewModule
 import java.time.format.DateTimeFormatter
@@ -98,7 +93,7 @@ fun SuccessfulCalendarDayEvent(
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
             FloatingActionButton(
-                backgroundColor = Orange,
+                backgroundColor = Brize2,
                 onClick = {
                     price.value.ifBlank {
                         Toast.makeText(
@@ -143,13 +138,13 @@ fun SuccessfulCalendarDayEvent(
                     onNavigateToCalendarScreen()
                 }
             ) {
-                Icon(Icons.Filled.Done, contentDescription = "Done")
+                Icon(Icons.Filled.Done, contentDescription = "Done", tint = Color.White)
 
 
             }
 
         },
-        backgroundColor = PurpleGrey40,
+        backgroundColor = Color.White,
     ) {
 
 
@@ -168,15 +163,16 @@ fun SuccessfulCalendarDayEvent(
                     .padding(8.dp)
 
                     .verticalScroll(rememberScrollState()),
-                border = BorderStroke(1.dp, Color.Black),
+
 
                 ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            if (clientViewModule.editedClient.value?.gender == GenderType.MALE) MyBlue
-                            else MyPink
+//                            if (clientViewModule.editedClient.value?.gender == GenderType.MALE) MyBlue
+//                            else MyPink
+                            Color.White
                         )
                         .padding(horizontal = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,

@@ -2,7 +2,6 @@ package ru.zhogin.composeClientApp.compose.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,7 +33,7 @@ import ru.zhogin.composeClientApp.compose.calendar.CustomMonthHeader
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
 import ru.zhogin.composeClientApp.ui.theme.Brize2
-import ru.zhogin.composeClientApp.ui.theme.MyBlue
+import ru.zhogin.composeClientApp.ui.theme.MyGrey2
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayEventViewModel
 import ru.zhogin.composeClientApp.viewmodel.CalendarDayViewModel
 import java.time.LocalDate
@@ -93,7 +91,7 @@ fun CalendarScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MyBlue),
+            .background(MyGrey2),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Card(
@@ -101,7 +99,8 @@ fun CalendarScreen(
                 .fillMaxWidth(0.8f)
                 .padding(top = 4.dp, bottom = 4.dp, start = 4.dp, end = 4.dp),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Black),
+            elevation = 16.dp
+            //border = BorderStroke(1.dp, Color.Black),
 
             ) {
 
@@ -125,7 +124,8 @@ fun CalendarScreen(
                 .fillMaxWidth(0.9f)
                 .padding(top = 4.dp, bottom = 4.dp, start = 4.dp, end = 4.dp),
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Black),
+            //border = BorderStroke(1.dp, Color.Black),
+            elevation = 16.dp
 
             ) {
 
