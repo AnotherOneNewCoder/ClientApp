@@ -3,6 +3,7 @@ package ru.zhogin.composeClientApp.compose.calendar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +30,7 @@ import java.util.Locale
 fun CustomMonthHeader(
     monthState: MonthState,
     modifier: Modifier = Modifier,
+    onShowWeekCalendar: () -> Unit,
 ) {
 
         Row(
@@ -64,6 +67,23 @@ fun CustomMonthHeader(
                     colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                     contentDescription = "Next",
                 )
+            }
+            Box(
+                modifier = modifier
+                    //.fillMaxWidth()
+                    .background(Brize2)
+
+                ,
+                contentAlignment = Alignment.TopEnd
+            ) {
+                IconButton(onClick = onShowWeekCalendar) {
+                    Image(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                        contentDescription = "Show week calendar",
+                    )
+                }
+
             }
         }
 

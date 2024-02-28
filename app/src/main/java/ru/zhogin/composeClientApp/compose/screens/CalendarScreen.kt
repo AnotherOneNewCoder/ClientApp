@@ -17,8 +17,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -75,6 +78,9 @@ fun CalendarScreen(
     val openAlertDialog = remember {
         mutableStateOf(false)
     }
+    var showMonthCalendar by rememberSaveable {
+        mutableStateOf(false)
+    }
     when (openAlertDialog.value) {
         true -> {
             DeleteDialogBox(
@@ -106,32 +112,45 @@ fun CalendarScreen(
 
             ) {
 
-            SelectableWeekCalendar(
-                dayContent = {
-                    CustomDay(state = it,
-                        onClick = { clickedDay ->
-                            date.value = clickedDay.toString()
-                            calendarDayViewModel.editedSelectedDay.value = clickedDay
-                        })
-                },
-                daysOfWeekHeader = {
-                    CustomDaysOfWeekHeader(daysOfWeek = it)
-                },
-                weekHeader = {CustomWeekHeader(weekState = it)},
+            when(showMonthCalendar) {
+                true -> {
+                    SelectableCalendar(
+                        //modifier = Modifier.size(320.dp),
+                        dayContent = {
+                            CustomDay(state = it,
+                                onClick = { clickedDay ->
+                                    date.value = clickedDay.toString()
+                                    calendarDayViewModel.editedSelectedDay.value = clickedDay
+                                })
+                        },
+                        monthHeader = { CustomMonthHeader(
+                            monthState = it,
+                            onShowWeekCalendar = {showMonthCalendar = false}) },
+                        daysOfWeekHeader = { CustomDaysOfWeekHeader(daysOfWeek = it) }
+                    )
+                }
+                else -> {
+                    SelectableWeekCalendar(
+                        dayContent = {
+                            CustomDay(state = it,
+                                onClick = { clickedDay ->
+                                    date.value = clickedDay.toString()
+                                    calendarDayViewModel.editedSelectedDay.value = clickedDay
+                                })
+                        },
+                        daysOfWeekHeader = {
+                            CustomDaysOfWeekHeader(daysOfWeek = it)
+                        },
+                        weekHeader = {CustomWeekHeader(
+                            weekState = it,
+                            onShowMonthCalendar = {showMonthCalendar = true})},
 
-            )
-//            SelectableCalendar(
-//                //modifier = Modifier.size(320.dp),
-//                dayContent = {
-//                    CustomDay(state = it,
-//                        onClick = { clickedDay ->
-//                            date.value = clickedDay.toString()
-//                            calendarDayViewModel.editedSelectedDay.value = clickedDay
-//                        })
-//                },
-//                monthHeader = { CustomMonthHeader(monthState = it) },
-//                daysOfWeekHeader = { CustomDaysOfWeekHeader(daysOfWeek = it) }
-//            )
+                        )
+                }
+            }
+
+
+
         }
 
         Card(

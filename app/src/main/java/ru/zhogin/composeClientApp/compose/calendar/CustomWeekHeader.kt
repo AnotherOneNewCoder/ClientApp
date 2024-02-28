@@ -3,14 +3,17 @@ package ru.zhogin.composeClientApp.compose.calendar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
@@ -28,13 +31,17 @@ import java.util.Locale
 fun CustomWeekHeader(
     weekState: WeekState,
     modifier: Modifier = Modifier,
+    onShowMonthCalendar:() -> Unit
 ) {
 
     Row(
-        modifier = modifier.fillMaxWidth().background(Brize2),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Brize2),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        //Spacer(modifier = Modifier.width(28.dp))
         IconButton(
             modifier = Modifier.testTag("Decrement"),
             onClick = { weekState.currentWeek = weekState.currentWeek.dec() }
@@ -65,7 +72,26 @@ fun CustomWeekHeader(
                 contentDescription = "Next",
             )
         }
+        Box(
+            modifier = modifier
+                //.fillMaxWidth()
+                .background(Brize2)
+
+            ,
+            contentAlignment = Alignment.TopEnd
+        ) {
+            IconButton(onClick = onShowMonthCalendar) {
+                Image(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                    contentDescription = "Show month calendar",
+                )
+            }
+
+        }
+
     }
+
 
 
 }
