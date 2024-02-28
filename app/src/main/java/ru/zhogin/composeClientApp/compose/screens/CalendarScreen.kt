@@ -25,11 +25,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.github.boguszpawlowski.composecalendar.SelectableCalendar
+import io.github.boguszpawlowski.composecalendar.SelectableWeekCalendar
 import ru.zhogin.composeClientApp.R
 import ru.zhogin.composeClientApp.compose.alertdialog.DeleteDialogBox
 import ru.zhogin.composeClientApp.compose.calendar.CustomDay
 import ru.zhogin.composeClientApp.compose.calendar.CustomDaysOfWeekHeader
 import ru.zhogin.composeClientApp.compose.calendar.CustomMonthHeader
+import ru.zhogin.composeClientApp.compose.calendar.CustomWeekHeader
 import ru.zhogin.composeClientApp.compose.calendar.Schedule
 import ru.zhogin.composeClientApp.dto.CalendarDayEvent
 import ru.zhogin.composeClientApp.ui.theme.Brize2
@@ -104,9 +106,7 @@ fun CalendarScreen(
 
             ) {
 
-
-            SelectableCalendar(
-                //modifier = Modifier.size(320.dp),
+            SelectableWeekCalendar(
                 dayContent = {
                     CustomDay(state = it,
                         onClick = { clickedDay ->
@@ -114,9 +114,24 @@ fun CalendarScreen(
                             calendarDayViewModel.editedSelectedDay.value = clickedDay
                         })
                 },
-                monthHeader = { CustomMonthHeader(monthState = it) },
-                daysOfWeekHeader = { CustomDaysOfWeekHeader(daysOfWeek = it) }
+                daysOfWeekHeader = {
+                    CustomDaysOfWeekHeader(daysOfWeek = it)
+                },
+                weekHeader = {CustomWeekHeader(weekState = it)},
+
             )
+//            SelectableCalendar(
+//                //modifier = Modifier.size(320.dp),
+//                dayContent = {
+//                    CustomDay(state = it,
+//                        onClick = { clickedDay ->
+//                            date.value = clickedDay.toString()
+//                            calendarDayViewModel.editedSelectedDay.value = clickedDay
+//                        })
+//                },
+//                monthHeader = { CustomMonthHeader(monthState = it) },
+//                daysOfWeekHeader = { CustomDaysOfWeekHeader(daysOfWeek = it) }
+//            )
         }
 
         Card(
